@@ -872,6 +872,113 @@
 const STORAGE_KEY = 'legisalimentos_data_v1';
 const SESSION_KEY = 'legisalimentos_session_v1';
 
+ // --- CONEXÃO COM O SUPABASE ---
+const SUPABASE_URL = "COLE_AQUI_A_SUA_URL_DO_BLOCO_DE_NOTAS";
+const SUPABASE_ANON_KEY = "COLE_AQUI_A_SUA_CHAVE_ANON_DO_BLOCO_DE_NOTAS";
+
+// Função automática para carregar dados do Supabase e atualizar o DEFAULT_DATA do site
+async function carregarDadosDoSupabase() {
+    try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/configuracoes?id=eq.1`, {
+            method: 'GET',
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!response.ok) throw new Error('Erro ao buscar dados do Supabase');
+        
+        const dados = await response.json();
+        
+        if (dados && dados.length > 0) {
+            const banco = dados[0];
+            
+            // Substitui os títulos e preços do estado padrão pelos do Supabase
+            if (banco.servico_1_nome) DEFAULT_DATA.services[0].title = banco.servico_1_nome;
+            if (banco.servico_1_preco) DEFAULT_DATA.services[0].price = banco.servico_1_preco;
+            
+            if (banco.servico_2_nome) DEFAULT_DATA.services[1].title = banco.servico_2_nome;
+            if (banco.servico_2_preco) DEFAULT_DATA.services[1].price = banco.servico_2_preco;
+            
+            if (banco.servico_3_nome) DEFAULT_DATA.services[2].title = banco.servico_3_nome;
+            if (banco.servico_3_preco) DEFAULT_DATA.services[2].price = banco.servico_3_preco;
+            
+            if (banco.servico_4_nome) DEFAULT_DATA.services[3].title = banco.servico_4_nome;
+            if (banco.servico_4_preco) DEFAULT_DATA.services[3].price = banco.servico_4_preco;
+            
+            if (banco.servico_5_nome) DEFAULT_DATA.services[4].title = banco.servico_5_nome;
+            if (banco.servico_5_preco) DEFAULT_DATA.services[4].price = banco.servico_5_preco;
+            
+            if (banco.servico_6_nome) DEFAULT_DATA.services[5].title = banco.servico_6_nome;
+            if (banco.servico_6_preco) DEFAULT_DATA.services[5].price = banco.servico_6_preco;
+            
+            // Força o site a se redesenhar com os novos dados online
+            if (typeof renderServices === 'function') renderServices();
+            if (typeof init === 'function') init();
+            if (typeof render === 'function') render();
+            
+            // Preenche o painel administrativo se as caixas de texto existirem na tela
+            preencherCamposDoPainelAdmin(banco);
+        }
+    } catch (error) {
+        console.error("Usando dados padrão do site:", error);
+    }
+}
+
+// Executa a busca assim que o site abre
+document.addEventListener("DOMContentLoaded", carregarDadosDoSupabase);
+
+// Função auxiliar para o painel de administração (CRUD)
+function preencherCamposDoPainelAdmin(banco) {
+    for (let i = 1; i <= 6; i++) {
+        const inputNome = document.getElementById(`input_s${i}_nome`);
+        const inputPreco = document.getElementById(`input_s${i}_preco`);
+        if (inputNome && banco[`servico_${i}_nome`]) inputNome.value = banco[`servico_${i}_nome`];
+        if (inputPreco && banco[`servico_${i}_preco`]) inputPreco.value = banco[`servico_${i}_preco`];
+    }
+}
+
+// Função para SALVAR as alterações feitas pelo admin de volta no Supabase
+async function salvarServicos() {
+    const mensagem = document.getElementById('mensagem-salvar');
+    if (mensagem) mensagem.innerText = "Salvando no Supabase...";
+    
+    const dadosParaSalvar = {};
+    for (let i = 1; i <= 6; i++) {
+        const inputNome = document.getElementById(`input_s${i}_nome`);
+        const inputPreco = document.getElementById(`input_s${i}_preco`);
+        if (inputNome) dadosParaSalvar[`servico_${i}_nome`] = inputNome.value;
+        if (inputPreco) dadosParaSalvar[`servico_${i}_preco`] = inputPreco.value;
+    }
+    
+    try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/configuracoes?id=eq.1`, {
+            method: 'PATCH',
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(dadosParaSalvar)
+        });
+        
+        if (!response.ok) throw new Error('Erro ao salvar no Supabase');
+        
+        if (mensagem) {
+            mensagem.innerText = "Alterações salvas com sucesso! Atualizando site...";
+            setTimeout(() => { 
+                mensagem.innerText = "";
+                carregarDadosDoSupabase();
+            }, 3000);
+        }
+    } catch (error) {
+        if (mensagem) mensagem.innerText = "Erro ao salvar dados no banco online.";
+        console.error(error);
+    }
+} 
 // ---------- Estado padrão ----------
 const DEFAULT_DATA = {
   ownerPhoto: '',
