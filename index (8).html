@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LegisAlimentos — Engenharia de Alimentos & Soluções Digitais</title>
+<meta name="description" content="LegisAlimentos — Engenharia de Alimentos especializada em sites, e-commerces, rotulagem, tabela nutricional, BPF, POP e APPCC para indústrias, comércios e empresas de alimentos." />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            50:  '#f0fdf4',
+            100: '#dcfce7',
+            200: '#bbf7d0',
+            300: '#86efac',
+            400: '#4ade80',
+            500: '#22c55e',
+            600: '#16a34a',
+            700: '#15803d',
+            800: '#166534',
+            900: '#14532d',
+          },
+          ink: {
+            50:  '#f8fafc',
+            100: '#f1f5f9',
+            200: '#e2e8f0',
+            300: '#cbd5e1',
+            400: '#94a3b8',
+            500: '#64748b',
+            600: '#475569',
+            700: '#334155',
+            800: '#1e293b',
+            900: '#0f172a',
+            950: '#020617',
+          }
+        },
+        fontFamily: {
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+          display: ['"Playfair Display"', 'serif'],
+        },
+        boxShadow: {
+          'soft': '0 10px 40px -10px rgba(2, 6, 23, 0.1)',
+          'glow': '0 0 30px rgba(34, 197, 94, 0.35)',
+        },
+        animation: {
+          'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          'float': 'float 4s ease-in-out infinite',
+          'shimmer': 'shimmer 2.5s linear infinite',
+        },
+        keyframes: {
+          float: {
+            '0%, 100%': { transform: 'translateY(0px)' },
+            '50%': { transform: 'translateY(-10px)' },
+          },
+          shimmer: {
+            '0%': { backgroundPosition: '-200% 0' },
+            '100%': { backgroundPosition: '200% 0' },
+          }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+
+  /* Gradiente hero */
+  .hero-gradient {
+    background:
+      radial-gradient(1200px 600px at 10% 10%, rgba(34,197,94,0.18), transparent 60%),
+      radial-gradient(900px 500px at 90% 30%, rgba(15,76,59,0.18), transparent 60%),
+      linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  }
+
+  /* Efeito glass */
+  .glass {
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+  }
+
+  /* Brilho premium no botão WhatsApp */
+  .whats-fab {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    box-shadow: 0 12px 30px -5px rgba(34,197,94,0.55);
+  }
+  .whats-fab::before{
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 9999px;
+    background: radial-gradient(closest-side, rgba(34,197,94,0.5), transparent 70%);
+    filter: blur(8px);
+    z-index: -1;
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+  @keyframes pulseGlow {
+    0%, 100% { opacity: .6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.08); }
+  }
+
+  /* Botão chamativo "piscante" */
+  .cta-pulse {
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-pulse::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+    animation: ctaShine 2.6s infinite;
+  }
+  @keyframes ctaShine {
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+
+  /* Card com hover refinado */
+  .card-hover {
+    transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 25px 50px -12px rgba(2,6,23,0.18);
+  }
+
+  /* Marca d'água sutil no header */
+  .nav-blur {
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+  }
+
+  /* Inputs do admin */
+  .input, .textarea, .select {
+    width: 100%;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    background: #fff;
+    font-size: 0.9rem;
+    transition: all .2s ease;
+  }
+  .input:focus, .textarea:focus, .select:focus {
+    outline: none;
+    border-color: #16a34a;
+    box-shadow: 0 0 0 4px rgba(34,197,94,0.12);
+  }
+  .label { font-size: 0.78rem; font-weight: 600; color: #334155; margin-bottom: 0.35rem; display: block; }
+
+  /* Scrollbar admin */
+  .nice-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+  .nice-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+  .nice-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+  /* Modal */
+  .modal-backdrop {
+    background: rgba(2, 6, 23, 0.55);
+    backdrop-filter: blur(6px);
+  }
+
+  /* Botão admin oculto */
+  .admin-trigger {
+    cursor: pointer;
+    user-select: none;
+    opacity: 0.5;
+    transition: opacity .2s;
+  }
+  .admin-trigger:hover { opacity: 1; }
+
+  /* Linha decorativa */
+  .divider-leaf {
+    width: 64px; height: 4px; border-radius: 4px;
+    background: linear-gradient(90deg, #16a34a, #0ea5e9);
+  }
+
+  /* Imagens placeholder com cor */
+  .placeholder-img {
+    background: linear-gradient(135deg, #dcfce7, #cffafe);
+    display: flex; align-items: center; justify-content: center;
+    color: #166534; font-weight: 700; font-size: 0.9rem;
+  }
+
+  /* Tag de seção */
+  .tag {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.3rem 0.7rem; border-radius: 9999px;
+    background: #f0fdf4; color: #166534; font-weight: 600; font-size: 0.72rem;
+    border: 1px solid #bbf7d0;
+  }
+
+  /* Animação de entrada */
+  .reveal { opacity: 0; transform: translateY(20px); transition: all .7s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body class="bg-white text-ink-800 antialiased">
+
+<!-- ================== NAVBAR ================== -->
+<header id="navbar" class="fixed top-0 inset-x-0 z-40 transition-all duration-300">
+  <nav class="nav-blur bg-white/70 border-b border-ink-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-20">
+        <a href="#home" class="flex items-center gap-2 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-600 to-ink-800 flex items-center justify-center shadow-soft">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19.2 2.96a1 1 0 0 1 1.8.66V11a7 7 0 0 1-7 7Z"/><path d="M2 21a7 7 0 0 1 9-6.7"/></svg>
+          </div>
+          <div class="leading-tight">
+            <p class="font-display font-extrabold text-lg text-ink-900 group-hover:text-brand-700 transition">LegisAlimentos</p>
+            <p class="text-[10px] uppercase tracking-widest text-ink-500">Engenharia de Alimentos</p>
+            <p class="text-[10px] tracking-wider text-ink-500/90 font-medium">CRQ-RS 053004319</p>
+          </div>
+        </a>
+
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium text-ink-700">
+          <a href="#sobre" class="hover:text-brand-700 transition">Sobre</a>
+          <a href="#servicos" class="hover:text-brand-700 transition">Serviços</a>
+          <a href="#legislacao" class="hover:text-brand-700 transition">Legislação</a>
+          <a href="#video" class="hover:text-brand-700 transition">Vídeo</a>
+          <a href="#contato" class="hover:text-brand-700 transition">Contato</a>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <a id="navWhats" href="#" target="_blank" rel="noopener" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-soft transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.94 11.94 0 0 0 12 0C5.4 0 0 5.4 0 12a11.94 11.94 0 0 0 1.6 6L0 24l6.2-1.6A12 12 0 0 0 12 24c6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.5-8.5ZM12 22a10 10 0 0 1-5.1-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A10 10 0 1 1 22 12 10 10 0 0 1 12 22Zm5.5-7.5c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.3 8.3 0 0 1-2.5-1.6 9.4 9.4 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.5s.1-.4 0-.5l-.7-1.7c-.2-.4-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3 1 2.5 1.1 2.7a10.4 10.4 0 0 0 4 3.5l1.3.4a3.2 3.2 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.2-.3-.2-.6-.4Z"/></svg>
+            Falar agora
+          </a>
+          <button id="menuBtn" class="md:hidden p-2 rounded-lg hover:bg-ink-100 transition" aria-label="Abrir menu">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden border-t border-ink-100 bg-white">
+      <div class="px-4 py-3 flex flex-col gap-1 text-sm font-medium">
+        <a href="#sobre" class="px-3 py-2 rounded-lg hover:bg-ink-50">Sobre</a>
+        <a href="#servicos" class="px-3 py-2 rounded-lg hover:bg-ink-50">Serviços</a>
+        <a href="#legislacao" class="px-3 py-2 rounded-lg hover:bg-ink-50">Legislação</a>
+        <a href="#video" class="px-3 py-2 rounded-lg hover:bg-ink-50">Vídeo</a>
+        <a href="#contato" class="px-3 py-2 rounded-lg hover:bg-ink-50">Contato</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ================== HERO ================== -->
+<section id="home" class="hero-gradient pt-28 lg:pt-36 pb-16 lg:pb-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+    <div class="reveal in">
+      <span class="tag mb-5">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-600"></span>
+        Fundado por Engenheiro de Alimentos
+      </span>
+      <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.05] text-ink-900">
+        Soluções digitais <span class="bg-gradient-to-r from-brand-600 to-ink-800 bg-clip-text text-transparent">técnicas e regulatórias</span> para o setor de alimentos.
+      </h1>
+      <p class="mt-5 text-lg text-ink-600 max-w-xl">
+        A <strong>LegisAlimentos</strong> desenvolve <strong>sites, e-commerces e plataformas</strong> sob medida para indústrias, comércios, restaurantes e infoprodutores do ramo alimentício — com a autoridade de quem entende de verdade da legislação do <strong>MAPA</strong> e da <strong>ANVISA</strong>.
+      </p>
+      <div class="mt-7 flex flex-wrap gap-3">
+        <a id="heroCta" href="#" target="_blank" rel="noopener" class="cta-pulse inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-brand-600 to-brand-700 text-white font-semibold shadow-soft hover:shadow-glow transition">
+          Quero vender mais no setor de alimentos
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#servicos" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-ink-200 hover:border-brand-600 hover:text-brand-700 font-semibold transition">
+          Ver serviços
+        </a>
+      </div>
+
+      <div class="mt-10 grid grid-cols-3 gap-4 max-w-lg">
+        <div>
+          <p class="font-display text-3xl font-extrabold text-ink-900">+100%</p>
+          <p class="text-xs text-ink-500 uppercase tracking-wider">Autoridade técnica</p>
+        </div>
+        <div>
+          <p class="font-display text-3xl font-extrabold text-ink-900">MAPA</p>
+          <p class="text-xs text-ink-500 uppercase tracking-wider">e ANVISA</p>
+        </div>
+        <div>
+          <p class="font-display text-3xl font-extrabold text-ink-900">24/7</p>
+          <p class="text-xs text-ink-500 uppercase tracking-wider">Atendimento</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative reveal in">
+      <div class="absolute -inset-6 bg-gradient-to-tr from-brand-200/40 via-cyan-100/30 to-transparent rounded-[2.5rem] blur-2xl"></div>
+      <div class="relative glass rounded-[2rem] p-3 shadow-soft">
+        <div class="rounded-[1.6rem] overflow-hidden bg-gradient-to-br from-ink-900 to-ink-800 aspect-[4/5] sm:aspect-[5/6]">
+          <div class="relative w-full h-full">
+            <img id="ownerPhoto" alt="Foto do proprietário" class="w-full h-full object-cover hidden" />
+            <!-- LOGO: imagem do upload (se houver) OU SVG padrão -->
+            <div id="logoBg" class="w-full h-full flex items-center justify-center bg-white relative">
+              <img id="logoImageUpload" alt="Logo LegisAlimentos" class="w-3/4 h-3/4 max-w-md object-contain hidden" />
+              <svg id="logoSvgDefault" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" class="w-3/4 h-3/4 max-w-md" aria-label="Logo LegisAlimentos">
+                <defs>
+                  <linearGradient id="blueRing" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1e3a5f"/>
+                    <stop offset="100%" stop-color="#0f1f3a"/>
+                  </linearGradient>
+                  <linearGradient id="greenRing" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#2e7d32"/>
+                    <stop offset="100%" stop-color="#1b5e20"/>
+                  </linearGradient>
+                  <linearGradient id="leafGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#1b5e20"/>
+                    <stop offset="50%" stop-color="#388e3c"/>
+                    <stop offset="100%" stop-color="#66bb6a"/>
+                  </linearGradient>
+                  <linearGradient id="grainGold" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#f9a825"/>
+                    <stop offset="100%" stop-color="#c9a227"/>
+                  </linearGradient>
+                </defs>
+                <!-- Anel externo azul escuro -->
+                <circle cx="300" cy="300" r="280" fill="none" stroke="url(#blueRing)" stroke-width="22"/>
+                <!-- Anel interno verde -->
+                <circle cx="300" cy="300" r="240" fill="none" stroke="url(#greenRing)" stroke-width="14" stroke-dasharray="0 30 200 30 200 30"/>
+                <!-- Folhas grandes verdes (base) -->
+                <path d="M 300 480 Q 220 420 200 320 Q 240 360 300 380 Q 260 440 300 480 Z" fill="url(#leafGrad)" opacity="0.95"/>
+                <path d="M 300 480 Q 380 420 400 320 Q 360 360 300 380 Q 340 440 300 480 Z" fill="url(#leafGrad)" opacity="0.95"/>
+                <path d="M 300 460 Q 240 400 230 320 Q 270 360 300 370 Q 280 410 300 460 Z" fill="url(#leafGrad)" opacity="0.85"/>
+                <path d="M 300 460 Q 360 400 370 320 Q 330 360 300 370 Q 320 410 300 460 Z" fill="url(#leafGrad)" opacity="0.85"/>
+                <!-- Espigas de trigo douradas (esquerda e centro) -->
+                <g transform="translate(195,180)">
+                  <line x1="0" y1="0" x2="0" y2="120" stroke="url(#grainGold)" stroke-width="3"/>
+                  <ellipse cx="-10" cy="15" rx="6" ry="12" fill="url(#grainGold)" transform="rotate(-30 -10 15)"/>
+                  <ellipse cx="10" cy="15" rx="6" ry="12" fill="url(#grainGold)" transform="rotate(30 10 15)"/>
+                  <ellipse cx="-12" cy="35" rx="6" ry="12" fill="url(#grainGold)" transform="rotate(-30 -12 35)"/>
+                  <ellipse cx="12" cy="35" rx="6" ry="12" fill="url(#grainGold)" transform="rotate(30 12 35)"/>
+                  <ellipse cx="-13" cy="55" rx="6" ry="12" fill="url(#grainGold)" transform="rotate(-30 -13 55)"/>
+                  <ellipse cx="13" cy="55" rx="6" ry="12" fill="url(#grainGold)" transform="rotate(30 13 55)"/>
+                  <ellipse cx="-14" cy="75" rx="6" ry="12" fill="url(#grainGold)" transform="rotate(-30 -14 75)"/>
+                  <ellipse cx="14" cy="75" rx="6" ry="12" fill="url(#grainGold)" transform="rotate(30 14 75)"/>
+                  <ellipse cx="0" cy="0" rx="5" ry="11" fill="url(#grainGold)"/>
+                </g>
+                <g transform="translate(265,160)">
+                  <line x1="0" y1="0" x2="0" y2="140" stroke="url(#grainGold)" stroke-width="3"/>
+                  <ellipse cx="-11" cy="18" rx="7" ry="13" fill="url(#grainGold)" transform="rotate(-30 -11 18)"/>
+                  <ellipse cx="11" cy="18" rx="7" ry="13" fill="url(#grainGold)" transform="rotate(30 11 18)"/>
+                  <ellipse cx="-13" cy="40" rx="7" ry="13" fill="url(#grainGold)" transform="rotate(-30 -13 40)"/>
+                  <ellipse cx="13" cy="40" rx="7" ry="13" fill="url(#grainGold)" transform="rotate(30 13 40)"/>
+                  <ellipse cx="-14" cy="62" rx="7" ry="13" fill="url(#grainGold)" transform="rotate(-30 -14 62)"/>
+                  <ellipse cx="14" cy="62" rx="7" ry="13" fill="url(#grainGold)" transform="rotate(30 14 62)"/>
+                  <ellipse cx="-15" cy="84" rx="7" ry="13" fill="url(#grainGold)" transform="rotate(-30 -15 84)"/>
+                  <ellipse cx="15" cy="84" rx="7" ry="13" fill="url(#grainGold)" transform="rotate(30 15 84)"/>
+                  <ellipse cx="-15" cy="106" rx="7" ry="13" fill="url(#grainGold)" transform="rotate(-30 -15 106)"/>
+                  <ellipse cx="15" cy="106" rx="7" ry="13" fill="url(#grainGold)" transform="rotate(30 15 106)"/>
+                  <ellipse cx="0" cy="0" rx="6" ry="13" fill="url(#grainGold)"/>
+                </g>
+                <!-- Balança da justiça (centro, azul escuro) -->
+                <g transform="translate(300,310)">
+                  <!-- Haste vertical -->
+                  <rect x="-6" y="-110" width="12" height="120" fill="#1e3a5f" rx="3"/>
+                  <!-- Haste horizontal -->
+                  <rect x="-90" y="-50" width="180" height="12" fill="#1e3a5f" rx="3"/>
+                  <!-- Topo (cabeça da balança) -->
+                  <rect x="-12" y="-118" width="24" height="14" fill="#1e3a5f" rx="2"/>
+                  <!-- Base -->
+                  <ellipse cx="0" cy="15" rx="40" ry="10" fill="#1e3a5f"/>
+                  <!-- Prato esquerdo (triângulo/cordas + prato) -->
+                  <line x1="-70" y1="-50" x2="-70" y2="10" stroke="#1e3a5f" stroke-width="2.5"/>
+                  <path d="M -100 10 L -40 10 L -70 30 Z" fill="#1e3a5f"/>
+                  <!-- Prato direito -->
+                  <line x1="70" y1="-50" x2="70" y2="10" stroke="#1e3a5f" stroke-width="2.5"/>
+                  <path d="M 40 10 L 100 10 L 70 30 Z" fill="#1e3a5f"/>
+                  <!-- Detalhes azuis mais escuros nos pratos -->
+                  <path d="M -95 12 L -45 12 L -70 28 Z" fill="#0f1f3a" opacity="0.5"/>
+                  <path d="M 45 12 L 95 12 L 70 28 Z" fill="#0f1f3a" opacity="0.5"/>
+                  <!-- Brilho na haste -->
+                  <rect x="-2" y="-105" width="3" height="100" fill="#3b6ea5" opacity="0.6"/>
+                </g>
+                <!-- Folhas adicionais decorativas -->
+                <path d="M 170 380 Q 140 340 150 280 Q 175 310 185 360 Q 180 380 170 380 Z" fill="url(#leafGrad)" opacity="0.7"/>
+                <path d="M 430 380 Q 460 340 450 280 Q 425 310 415 360 Q 420 380 430 380 Z" fill="url(#leafGrad)" opacity="0.7"/>
+              </svg>
+            </div>
+            <!-- Overlay escuro para contraste do texto -->
+            <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black/70 pointer-events-none"></div>
+            <!-- Texto sobreposto -->
+            <div class="absolute inset-0 flex flex-col items-center justify-end text-white p-6 sm:p-8 text-center pb-8 sm:pb-10">
+              <div class="mt-5 flex flex-wrap gap-2 justify-center">
+                <span class="px-3 py-1 text-xs rounded-full bg-white/15 border border-white/25 backdrop-blur-sm">Sistemas de Qualidade</span>
+                <span class="px-3 py-1 text-xs rounded-full bg-white/15 border border-white/25 backdrop-blur-sm">Rotulagem</span>
+                <span class="px-3 py-1 text-xs rounded-full bg-white/15 border border-white/25 backdrop-blur-sm">Web para Alimentos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="px-4 py-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-widest text-ink-500">Especialista em</p>
+            <p class="font-semibold text-ink-900">Tecnologia + Legislação de Alimentos</p>
+          </div>
+          <div class="hidden sm:flex w-10 h-10 rounded-full bg-brand-50 items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-brand-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== TRUST BAR ================== -->
+<section class="border-y border-ink-100 bg-ink-50/60">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-ink-500 text-sm">
+    <span class="font-semibold text-ink-700">Conformidade:</span>
+    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-600"></span> MAPA</span>
+    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-600"></span> ANVISA</span>
+    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-600"></span> BPF / POP / APPCC</span>
+    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-600"></span> RDC 26/2015</span>
+    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-600"></span> Lei de Rotulagem</span>
+  </div>
+</section>
+
+<!-- ================== SOBRE ================== -->
+<section id="sobre" class="py-20 lg:py-28">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+    <div class="reveal">
+      <span class="tag">Quem está por trás</span>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-ink-900 leading-tight">
+        Engenharia de Alimentos aplicada ao digital.
+      </h2>
+      <div class="divider-leaf mt-5"></div>
+      <p class="mt-6 text-ink-600 text-lg">
+        Unimos <strong>expertise técnica regulatória</strong> (MAPA, ANVISA, BPF, POP, APPCC, rotulagem nutricional) com <strong>desenvolvimento web de alta performance</strong> para gerar resultado real: mais vendas, conformidade e autoridade para sua marca de alimentos.
+      </p>
+      <ul class="mt-6 space-y-3">
+        <li class="flex gap-3"><span class="mt-1 w-5 h-5 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-bold">✓</span> Sites e e-commerces que vendem de verdade para a indústria alimentícia.</li>
+        <li class="flex gap-3"><span class="mt-1 w-5 h-5 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-bold">✓</span> Rotulagem e tabela nutricional adequadas tecnicamente.</li>
+        <li class="flex gap-3"><span class="mt-1 w-5 h-5 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-bold">✓</span> Manuais, planilhas e POPs prontos para inspeção.</li>
+        <li class="flex gap-3"><span class="mt-1 w-5 h-5 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-bold">✓</span> Conteúdo técnico que atrai clientes orgânicos todos os dias.</li>
+      </ul>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a id="sobreCta" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-ink-900 text-white font-semibold hover:bg-ink-800 transition">
+          Falar com o Engenheiro
+        </a>
+        <a href="#legislacao" class="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-ink-200 hover:border-brand-600 font-semibold transition">
+          Ler legislação
+        </a>
+      </div>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4 reveal">
+      <div class="card-hover p-6 rounded-2xl bg-white border border-ink-100 shadow-soft">
+        <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
+        </div>
+        <h3 class="font-bold text-ink-900">Conteúdo Técnico</h3>
+        <p class="text-sm text-ink-600 mt-1">Notícias diárias sobre MAPA e ANVISA para gerar tráfego orgânico qualificado.</p>
+      </div>
+      <div class="card-hover p-6 rounded-2xl bg-white border border-ink-100 shadow-soft">
+        <div class="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-700 flex items-center justify-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <h3 class="font-bold text-ink-900">Sites que Convertem</h3>
+        <p class="text-sm text-ink-600 mt-1">Landing pages e e-commerces desenhados para o setor de alimentos.</p>
+      </div>
+      <div class="card-hover p-6 rounded-2xl bg-white border border-ink-100 shadow-soft">
+        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        </div>
+        <h3 class="font-bold text-ink-900">Rotulagem Técnica</h3>
+        <p class="text-sm text-ink-600 mt-1">Adequação à legislação vigente com layout profissional.</p>
+      </div>
+      <div class="card-hover p-6 rounded-2xl bg-white border border-ink-100 shadow-soft">
+        <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 class="font-bold text-ink-900">BPF / POP / APPCC</h3>
+        <p class="text-sm text-ink-600 mt-1">Manuais e planilhas prontos para auditoria e inspeção.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== SERVIÇOS ================== -->
+<section id="servicos" class="py-20 lg:py-28 bg-gradient-to-b from-white to-ink-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <span class="tag">Nossos serviços</span>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-ink-900">
+        O que gera <span class="text-brand-700">lucro real</span> para sua empresa
+      </h2>
+      <p class="mt-4 text-ink-600">Soluções completas para indústrias, comércios, restaurantes e infoprodutores do ramo alimentício.</p>
+    </div>
+
+    <!-- Aviso: respaldo técnico-jurídico -->
+    <div class="max-w-4xl mx-auto mt-8 reveal">
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-ink-900 via-ink-800 to-ink-900 text-white shadow-soft border border-white/5">
+        <div class="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-brand-500/10 blur-3xl"></div>
+        <div class="relative p-6 sm:p-7 flex flex-col sm:flex-row gap-5 items-start">
+          <div class="shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-glow">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7h14M5 7l-2 5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2l-2-5"/><path d="M3 14h18v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          </div>
+          <div class="flex-1">
+            <div class="flex flex-wrap items-center gap-2 mb-2">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-500/15 border border-brand-400/30 text-brand-300 text-[11px] font-semibold uppercase tracking-wider">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-400"></span>
+                Respaldo técnico-jurídico
+              </span>
+              <span class="text-[11px] text-white/50 uppercase tracking-wider">Parceria institucional</span>
+            </div>
+            <p class="text-white/90 text-sm sm:text-[15px] leading-relaxed">
+              Nossos pareceres e soluções regulatórias contam com o respaldo técnico-jurídico do escritório de Advocacia <strong class="text-white">Lengler e Bladt Sociedade de Advogados</strong>.
+            </p>
+            <p class="mt-2 text-white/60 text-xs sm:text-sm leading-relaxed">
+              <strong class="text-white/80">Nota:</strong> Demandas judiciais ou representações particulares não integram o escopo padrão de engenharia e são tratadas diretamente com o escritório parceiro.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="servicesGrid" class="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- cards injetados via JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ================== LEGISLAÇÃO ================== -->
+<section id="legislacao" class="py-20 lg:py-28">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 reveal">
+      <div>
+        <span class="tag">Conteúdo gratuito</span>
+        <h2 class="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-ink-900">
+          Legislação, normas e atualizações
+        </h2>
+        <p class="mt-4 text-ink-600 max-w-2xl">Notícias e artigos sobre MAPA, ANVISA, rotulagem, BPF e tudo o que impacta o seu negócio no setor de alimentos.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-brand-50 text-brand-700 border border-brand-200">Atualizado semanalmente</span>
+      </div>
+    </div>
+
+    <div id="newsGrid" class="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- cards injetados via JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ================== VÍDEO INSTITUCIONAL ================== -->
+<section id="video" class="py-20 lg:py-28 bg-ink-900 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-center">
+    <div class="reveal">
+      <span class="tag" style="background: rgba(34,197,94,.1); color:#86efac; border-color: rgba(34,197,94,.25)">Quem somos</span>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
+        Vídeo Institucional
+      </h2>
+      <p class="mt-4 text-white/70 text-lg">Conheça a LegisAlimentos em poucos minutos e entenda como transformamos o digital de empresas do setor de alimentos.</p>
+      <ul class="mt-6 space-y-2 text-white/80">
+        <li class="flex gap-2"><span class="text-brand-400">●</span> Autoridade técnica em alimentos</li>
+        <li class="flex gap-2"><span class="text-brand-400">●</span> Tecnologia e design premium</li>
+        <li class="flex gap-2"><span class="text-brand-400">●</span> Foco total em resultado comercial</li>
+      </ul>
+    </div>
+    <div class="reveal">
+      <div class="relative aspect-video rounded-2xl overflow-hidden bg-black shadow-2xl ring-1 ring-white/10">
+        <div id="videoFrameWrap">
+          <iframe id="videoFrame" class="w-full h-full" src="" title="Vídeo Institucional" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div id="videoFallback" class="absolute inset-0 flex flex-col items-center justify-center text-center p-8 bg-gradient-to-br from-ink-800 to-ink-900">
+          <div class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <p class="font-semibold">Adicione o link do vídeo no painel admin</p>
+          <p class="text-sm text-white/60 mt-1">Suporta links do YouTube e Vimeo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== CTA FINAL ================== -->
+<section class="py-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-700 via-brand-600 to-cyan-600 p-10 lg:p-14 text-white shadow-soft">
+      <div class="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-white/10 blur-3xl"></div>
+      <div class="relative grid lg:grid-cols-2 gap-8 items-center">
+        <div>
+          <h3 class="font-display text-3xl lg:text-4xl font-extrabold leading-tight">Pronto para dar o próximo passo?</h3>
+          <p class="mt-3 text-white/90">Receba um diagnóstico gratuito do seu negócio de alimentos e descubra onde está o seu maior potencial de crescimento.</p>
+        </div>
+        <div class="flex flex-wrap gap-3 lg:justify-end">
+          <a id="ctaFinal" href="#" target="_blank" rel="noopener" class="cta-pulse inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white text-brand-700 font-semibold hover:bg-ink-50 transition">
+            Falar pelo WhatsApp
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a id="ctaEmail" href="#" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-white/40 hover:bg-white/10 font-semibold transition">
+            Enviar e-mail
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== CONTATO ================== -->
+<section id="contato" class="py-20 lg:py-28 bg-ink-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <span class="tag">Vamos conversar</span>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-ink-900">Fale com a LegisAlimentos</h2>
+      <p class="mt-4 text-ink-600">Escolha o canal de sua preferência — respondemos rápido.</p>
+    </div>
+
+    <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <a id="cardWhats" href="#" target="_blank" rel="noopener" class="group card-hover p-7 rounded-2xl bg-white border border-ink-100 shadow-soft flex flex-col">
+        <div class="w-12 h-12 rounded-xl bg-brand-600 text-white flex items-center justify-center mb-4 group-hover:scale-110 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.94 11.94 0 0 0 12 0C5.4 0 0 5.4 0 12a11.94 11.94 0 0 0 1.6 6L0 24l6.2-1.6A12 12 0 0 0 12 24c6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.5-8.5ZM12 22a10 10 0 0 1-5.1-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A10 10 0 1 1 22 12 10 10 0 0 1 12 22Z"/></svg>
+        </div>
+        <h3 class="font-bold text-ink-900">WhatsApp</h3>
+        <p class="text-sm text-ink-600 mt-1">Atendimento rápido e personalizado para o seu projeto.</p>
+        <span class="mt-5 inline-flex items-center gap-1 text-brand-700 font-semibold">Iniciar conversa <span aria-hidden>→</span></span>
+      </a>
+
+      <a id="cardInsta" href="#" target="_blank" rel="noopener" class="group card-hover p-7 rounded-2xl bg-white border border-ink-100 shadow-soft flex flex-col">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 via-fuchsia-500 to-purple-600 text-white flex items-center justify-center mb-4 group-hover:scale-110 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </div>
+        <h3 class="font-bold text-ink-900">Instagram</h3>
+        <p class="text-sm text-ink-600 mt-1">Acompanhe dicas, bastidores e novidades do setor de alimentos.</p>
+        <span class="mt-5 inline-flex items-center gap-1 text-fuchsia-600 font-semibold">Seguir no Instagram <span aria-hidden>→</span></span>
+      </a>
+
+      <a id="cardEmail" href="#" class="group card-hover p-7 rounded-2xl bg-white border border-ink-100 shadow-soft flex flex-col">
+        <div class="w-12 h-12 rounded-xl bg-ink-900 text-white flex items-center justify-center mb-4 group-hover:scale-110 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <h3 class="font-bold text-ink-900">E-mail Corporativo</h3>
+        <p class="text-sm text-ink-600 mt-1">Envie sua proposta, dúvida ou solicitação detalhada.</p>
+        <span class="mt-5 inline-flex items-center gap-1 text-ink-900 font-semibold">Enviar e-mail <span aria-hidden>→</span></span>
+        <span class="mt-1 text-xs text-ink-500 break-all">contato@legisalimentos.com.br</span>
+      </a>
+
+      <a id="cardLinkedin" href="#" target="_blank" rel="noopener" class="group card-hover p-7 rounded-2xl bg-white border border-ink-100 shadow-soft flex flex-col">
+        <div class="w-12 h-12 rounded-xl bg-[#0A66C2] text-white flex items-center justify-center mb-4 group-hover:scale-110 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg>
+        </div>
+        <h3 class="font-bold text-ink-900">LinkedIn do Engenheiro</h3>
+        <p class="text-sm text-ink-600 mt-1">Veja a trajetória profissional e conexões técnicas do fundador.</p>
+        <span class="mt-5 inline-flex items-center gap-1 text-[#0A66C2] font-semibold">Conectar no LinkedIn <span aria-hidden>→</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FOOTER ================== -->
+<footer class="bg-ink-950 text-white/80">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 grid lg:grid-cols-3 gap-10">
+    <div>
+      <div class="flex items-center gap-2">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19.2 2.96a1 1 0 0 1 1.8.66V11a7 7 0 0 1-7 7Z"/><path d="M2 21a7 7 0 0 1 9-6.7"/></svg>
+        </div>
+        <p class="font-display font-extrabold text-lg text-white">LegisAlimentos</p>
+      </div>
+      <p class="mt-4 text-sm text-white/60 max-w-sm">Tecnologia, engenharia e legislação aplicadas a negócios de alimentos. Mais vendas, mais conformidade, mais autoridade.</p>
+    </div>
+    <div>
+      <p class="text-sm font-semibold text-white">Navegação</p>
+      <ul class="mt-4 space-y-2 text-sm">
+        <li><a href="#sobre" class="hover:text-white transition">Sobre</a></li>
+        <li><a href="#servicos" class="hover:text-white transition">Serviços</a></li>
+        <li><a href="#legislacao" class="hover:text-white transition">Legislação</a></li>
+        <li><a href="#video" class="hover:text-white transition">Vídeo</a></li>
+        <li><a href="#contato" class="hover:text-white transition">Contato</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="text-sm font-semibold text-white">Contato</p>
+      <ul class="mt-4 space-y-2 text-sm">
+        <li><a id="ftWhats" href="#" target="_blank" rel="noopener" class="hover:text-white transition">WhatsApp</a></li>
+        <li><a id="ftInsta" href="#" target="_blank" rel="noopener" class="hover:text-white transition">Instagram</a></li>
+        <li><a id="ftEmail" href="#" class="hover:text-white transition">E-mail Corporativo</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/50">
+      <p>© <span id="year"></span> LegisAlimentos. Todos os direitos reservados.</p>
+      <p class="admin-trigger select-none" id="adminTrigger" title="Área restrita">.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ================== WHATSAPP FLUTUANTE ================== -->
+<a id="fabWhats" href="#" target="_blank" rel="noopener" class="whats-fab fixed bottom-5 right-5 z-30 w-14 h-14 rounded-full flex items-center justify-center text-white animate-float" aria-label="Falar no WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.94 11.94 0 0 0 12 0C5.4 0 0 5.4 0 12a11.94 11.94 0 0 0 1.6 6L0 24l6.2-1.6A12 12 0 0 0 12 24c6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.5-8.5ZM12 22a10 10 0 0 1-5.1-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A10 10 0 1 1 22 12 10 10 0 0 1 12 22Z"/></svg>
+</a>
+
+<!-- ================== LOGIN MODAL ================== -->
+<div id="loginModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <div class="px-6 py-5 bg-gradient-to-r from-ink-900 to-ink-800 text-white flex items-center justify-between">
+      <div>
+        <p class="text-xs uppercase tracking-widest text-white/60">Acesso restrito</p>
+        <p class="font-display text-lg font-bold">Painel LegisAlimentos</p>
+      </div>
+      <button onclick="closeLogin()" class="p-1.5 rounded-md hover:bg-white/10" aria-label="Fechar">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form id="loginForm" class="p-6 space-y-4" autocomplete="off" data-form-type="other">
+      <div>
+        <label class="label" for="loginUser">Usuário</label>
+        <input id="loginUser" class="input" type="text" autocomplete="off" data-form-type="other" data-lpignore="true" data-1p-ignore="true" name="legis_user" required />
+      </div>
+      <div>
+        <label class="label" for="loginPass">Senha</label>
+        <input id="loginPass" class="input" type="password" autocomplete="off" data-form-type="other" data-lpignore="true" data-1p-ignore="true" name="legis_pass" required />
+      </div>
+      <p id="loginError" class="hidden text-sm text-rose-600">Usuário ou senha incorretos.</p>
+      <button type="submit" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition">Entrar no painel</button>
+    </form>
+  </div>
+</div>
+
+<!-- ================== ADMIN PANEL ================== -->
+<div id="adminPanel" class="fixed inset-0 z-50 hidden bg-ink-50 overflow-auto">
+  <div class="min-h-screen flex flex-col">
+    <header class="bg-white border-b border-ink-100 sticky top-0 z-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-brand-600 to-ink-800 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1 3 5v6c0 5 3.8 9.7 9 11 5.2-1.3 9-6 9-11V5z"/></svg>
+          </div>
+          <div class="leading-tight">
+            <p class="font-display font-bold text-ink-900">Painel Administrativo</p>
+            <p class="text-xs text-ink-500">LegisAlimentos · CRUD completo · LocalStorage</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="#home" onclick="closeAdmin(event)" class="hidden sm:inline-flex items-center gap-1 text-sm text-ink-600 hover:text-brand-700 font-semibold">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M13 5l7 7-7 7"/></svg>
+            Ver site
+          </a>
+          <button onclick="logout()" class="px-4 py-2 rounded-lg border border-ink-200 hover:border-rose-400 hover:text-rose-600 text-sm font-semibold transition">Sair</button>
+        </div>
+      </div>
+      <nav class="border-t border-ink-100 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex overflow-x-auto nice-scroll">
+          <button data-tab="identidade" class="admin-tab px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-ink-600 hover:text-ink-900 whitespace-nowrap">Identidade Visual</button>
+          <button data-tab="servicos" class="admin-tab px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-ink-600 hover:text-ink-900 whitespace-nowrap">Serviços Lucrativos</button>
+          <button data-tab="legislacao" class="admin-tab px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-ink-600 hover:text-ink-900 whitespace-nowrap">Legislação (Notícias)</button>
+          <button data-tab="midia" class="admin-tab px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-ink-600 hover:text-ink-900 whitespace-nowrap">Mídia (Foto/Vídeo)</button>
+          <button data-tab="contato" class="admin-tab px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-ink-600 hover:text-ink-900 whitespace-nowrap">Contatos & Redes</button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+      <!-- ABA: IDENTIDADE VISUAL -->
+      <section data-pane="identidade" class="admin-pane hidden">
+        <div class="bg-white rounded-2xl border border-ink-100 shadow-soft p-6 max-w-3xl">
+          <h3 class="font-display text-xl font-bold text-ink-900">Logo da Empresa</h3>
+          <p class="text-sm text-ink-500">Faça upload do logo (jpeg, jpg, bmp ou png). Aparece em 3 lugares: card do Engenheiro, header e footer.</p>
+          <div class="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div id="logoPreviewAdmin" class="w-32 h-32 rounded-2xl bg-ink-100 overflow-hidden flex items-center justify-center text-ink-400 text-xs">sem upload</div>
+            <div class="flex-1 w-full">
+              <label class="label">Arquivo (.jpeg, .jpg, .bmp ou .png)</label>
+              <input id="logoFile" type="file" accept=".jpeg,.jpg,.bmp,.png,image/jpeg,image/bmp,image/png" class="input" />
+              <div class="mt-3 flex gap-2">
+                <button onclick="saveLogo()" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold">Salvar logo</button>
+                <button onclick="clearLogo()" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-ink-200 hover:border-rose-400 hover:text-rose-600 text-sm font-semibold">Remover logo</button>
+              </div>
+              <p class="text-[11px] text-ink-500 mt-3">💡 O logo <strong>substitui</strong> o SVG padrão. Se remover, o SVG padrão volta a aparecer.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABA: SERVIÇOS -->
+      <section data-pane="servicos" class="admin-pane">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <h3 class="font-display text-2xl font-bold text-ink-900">Serviços Lucrativos</h3>
+            <p class="text-sm text-ink-500">Edite, adicione ou remova serviços que aparecem na página inicial.</p>
+          </div>
+          <button onclick="addService()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-soft">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Novo serviço
+          </button>
+        </div>
+        <div id="servicesAdmin" class="grid md:grid-cols-2 gap-4"></div>
+      </section>
+
+      <!-- ABA: LEGISLAÇÃO -->
+      <section data-pane="legislacao" class="admin-pane hidden">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <h3 class="font-display text-2xl font-bold text-ink-900">Notícias de Legislação</h3>
+            <p class="text-sm text-ink-500">Crie posts sobre MAPA/ANVISA com imagem (.jpeg ou .bmp).</p>
+          </div>
+          <button onclick="addNews()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-soft">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Nova notícia
+          </button>
+        </div>
+        <div id="newsAdmin" class="grid md:grid-cols-2 gap-4"></div>
+      </section>
+
+      <!-- ABA: MÍDIA -->
+      <section data-pane="midia" class="admin-pane hidden">
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div class="bg-white rounded-2xl border border-ink-100 shadow-soft p-6">
+            <h3 class="font-display text-xl font-bold text-ink-900">Foto do Proprietário</h3>
+            <p class="text-sm text-ink-500">Envie um arquivo .jpeg ou .bmp — aparece na home.</p>
+            <div class="mt-4 flex items-center gap-4">
+              <div id="ownerPreview" class="w-28 h-28 rounded-2xl bg-ink-100 overflow-hidden flex items-center justify-center text-ink-400 text-xs">sem foto</div>
+              <div class="flex-1">
+                <label class="label">Arquivo (.jpeg ou .bmp)</label>
+                <input id="ownerFile" type="file" accept=".jpeg,.jpg,.bmp,image/jpeg,image/bmp" class="input" />
+                <button onclick="saveOwnerPhoto()" class="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-ink-900 hover:bg-ink-800 text-white text-sm font-semibold">Salvar foto</button>
+                <button onclick="clearOwnerPhoto()" class="mt-3 ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-ink-200 hover:border-rose-400 hover:text-rose-600 text-sm font-semibold">Remover</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-ink-100 shadow-soft p-6">
+            <h3 class="font-display text-xl font-bold text-ink-900">Vídeo Institucional</h3>
+            <p class="text-sm text-ink-500">Cole a URL do YouTube ou Vimeo.</p>
+            <div class="mt-4 space-y-3">
+              <div>
+                <label class="label">URL do vídeo</label>
+                <input id="videoUrl" class="input" placeholder="https://www.youtube.com/watch?v=..." />
+              </div>
+              <div class="flex gap-2">
+                <button onclick="saveVideo()" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-ink-900 hover:bg-ink-800 text-white text-sm font-semibold">Salvar vídeo</button>
+                <button onclick="previewVideo()" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-ink-200 hover:border-brand-600 hover:text-brand-700 text-sm font-semibold">Pré-visualizar</button>
+              </div>
+              <p class="text-xs text-ink-500">Dica: o sistema converte automaticamente links do YouTube (watch, share, embed) e Vimeo.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABA: CONTATOS -->
+      <section data-pane="contato" class="admin-pane hidden">
+        <div class="bg-white rounded-2xl border border-ink-100 shadow-soft p-6 max-w-3xl">
+          <h3 class="font-display text-xl font-bold text-ink-900">Contatos e Redes Sociais</h3>
+          <p class="text-sm text-ink-500">Atualize os links que aparecem nos botões do site.</p>
+          <div class="mt-4 grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="label">WhatsApp (com DDI, só números ou link completo)</label>
+              <input id="waLink" class="input" placeholder="https://wa.me/55XXXXXXXXXXX" />
+            </div>
+            <div>
+              <label class="label">Instagram (URL completa)</label>
+              <input id="igLink" class="input" placeholder="https://instagram.com/suaempresa" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="label">E-mail Corporativo</label>
+              <input id="emLink" class="input" placeholder="contato@legisalimentos.com.br" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="label">LinkedIn do Engenheiro (URL completa)</label>
+              <input id="liLink" class="input" placeholder="https://linkedin.com/in/seu-perfil" />
+            </div>
+          </div>
+          <button onclick="saveContacts()" class="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold">Salvar contatos</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="text-center text-xs text-ink-500 py-5">© LegisAlimentos · Painel Administrativo · suas alterações ficam salvas no navegador.</footer>
+  </div>
+</div>
+
+<!-- ================== TOAST ================== -->
+<div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 hidden">
+  <div class="bg-ink-900 text-white text-sm font-semibold px-4 py-2.5 rounded-full shadow-2xl"></div>
+</div>
+
+<!-- ================== SCRIPT ================== -->
+<script>
+/* =====================================================================
+   LEGISALIMENTOS - Single file
+   - LocalStorage para persistência
+   - CRUD manual completo no painel admin
+   ===================================================================== */
+
+const STORAGE_KEY = 'legisalimentos_data_v1';
+const SESSION_KEY = 'legisalimentos_session_v1';
+
+// ---------- Estado padrão ----------
+const DEFAULT_DATA = {
+  ownerPhoto: '',
+  logoImage: '',
+  videoUrl: '',
+  contacts: {
+    whatsapp: 'https://wa.me/55XXXXXXXXXXX',
+    instagram: 'https://instagram.com/legisalimentos',
+    email: 'contato@legisalimentos.com.br',
+    linkedin: 'https://linkedin.com/in/legisalimentos',
+  },
+  services: [
+    {
+      id: 'svc-1',
+      title: 'Sites e E-commerces para Alimentos',
+      description: 'Criação de sites, landing pages e lojas virtuais focadas em indústrias, comércios, restaurantes e infoprodutores (Hotmart). Design premium, performance e copy voltado para conversão.',
+      price: 'A partir de R$ 1.497',
+      link: 'https://wa.me/55XXXXXXXXXXX?text=Quero+um+site+para+minha+empresa+de+alimentos',
+      mpLink: '',
+      icon: 'globe',
+      accent: 'brand'
+    },
+    {
+      id: 'svc-2',
+      title: 'Rotulagem de Alimentos',
+      description: 'Adequação técnica e visual de rótulos conforme legislação vigente. Padronização, revisão de claims e identidade para sua marca.',
+      price: 'A partir de R$ 497',
+      link: 'https://wa.me/55XXXXXXXXXXX?text=Quero+regularizar+meus+rótulos',
+      mpLink: '',
+      icon: 'tag',
+      accent: 'cyan'
+    },
+    {
+      id: 'svc-3',
+      title: 'Tabela Nutricional',
+      description: 'Cálculo e diagramação da tabela nutricional conforme RDC 26/2015, com layout moderno e pronto para impressão ou e-commerce.',
+      price: 'A partir de R$ 297',
+      link: 'https://wa.me/55XXXXXXXXXXX?text=Quero+minha+tabela+nutricional',
+      mpLink: '',
+      icon: 'chart',
+      accent: 'amber'
+    },
+    {
+      id: 'svc-4',
+      title: 'Manual de BPF',
+      description: 'Manual completo de Boas Práticas de Fabricação, personalizado para a sua empresa, pronto para auditorias e inspeções.',
+      price: 'A partir de R$ 397',
+      link: 'https://wa.me/55XXXXXXXXXXX?text=Quero+o+manual+de+BPF',
+      mpLink: '',
+      icon: 'shield',
+      accent: 'rose'
+    },
+    {
+      id: 'svc-5',
+      title: 'POP — Procedimento Operacional Padrão',
+      description: 'POPs editáveis (Word/PDF) para todas as áreas da sua indústria ou comércio de alimentos, com fluxo e registros visuais.',
+      price: 'A partir de R$ 247',
+      link: 'https://wa.me/55XXXXXXXXXXX?text=Quero+os+POPs',
+      mpLink: '',
+      icon: 'doc',
+      accent: 'indigo'
+    },
+    {
+      id: 'svc-6',
+      title: 'APPCC — Análise de Perigos',
+      description: 'Plano APPCC completo com identificação de perigos, PCCs, limites críticos, monitoramento e ações corretivas.',
+      price: 'A partir de R$ 897',
+      link: 'https://wa.me/55XXXXXXXXXXX?text=Quero+implementar+o+APPCC',
+      mpLink: '',
+      icon: 'lock',
+      accent: 'emerald'
+    },
+  ],
+  news: [
+    {
+      id: 'news-1',
+      title: 'ANVISA atualiza regras para rotulagem nutricional frontal',
+      summary: 'Novas diretrizes reforçam a clareza na comunicação de açúcares, gorduras e sódio para o consumidor final.',
+      body: 'Conteúdo educativo sobre as mudanças promovidas pela ANVISA na rotulagem nutricional frontal. O objetivo é tornar mais legível a informação para o consumidor e impulsionar a reformulação de produtos pela indústria.',
+      image: '',
+      date: new Date().toISOString(),
+      tag: 'ANVISA'
+    },
+    {
+      id: 'news-2',
+      title: 'MAPA publica novo regulamento técnico para produtos de origem vegetal',
+      summary: 'A medida impacta pequenas agroindústrias, comércios atacadistas e food service em todo o país.',
+      body: 'Resumo do decreto, principais pontos, prazos de adequação e o que a sua empresa precisa fazer para se regularizar.',
+      image: '',
+      date: new Date().toISOString(),
+      tag: 'MAPA'
+    },
+    {
+      id: 'news-3',
+      title: 'Como implementar BPF em uma indústria de alimentos — guia rápido',
+      summary: 'Entenda os 5 pilares das Boas Práticas de Fabricação e o que é fiscalizado em auditorias.',
+      body: 'Um panorama técnico sobre BPF, com fluxo de implementação, registros obrigatórios e armadilhas comuns em inspeções.',
+      image: '',
+      date: new Date().toISOString(),
+      tag: 'BPF'
+    },
+  ]
+};
+
+let DATA = loadData();
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return structuredClone(DEFAULT_DATA);
+    const parsed = JSON.parse(raw);
+    // merge com defaults para garantir chaves novas
+    return { ...structuredClone(DEFAULT_DATA), ...parsed, contacts: { ...DEFAULT_DATA.contacts, ...(parsed.contacts||{}) } };
+  } catch (e) {
+    return structuredClone(DEFAULT_DATA);
+  }
+}
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+  toast('Alterações salvas com sucesso');
+}
+
+// ---------- Helpers ----------
+const $ = (q, el=document) => el.querySelector(q);
+const $$ = (q, el=document) => Array.from(el.querySelectorAll(q));
+
+function toast(msg){
+  const t = $('#toast');
+  t.firstElementChild.textContent = msg;
+  t.classList.remove('hidden');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.add('hidden'), 2200);
+}
+
+function formatDate(iso){
+  try { return new Date(iso).toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' }); }
+  catch(e){ return ''; }
+}
+
+function iconFor(name, cls='w-6 h-6'){
+  const map = {
+    globe: `<svg xmlns="http://www.w3.org/2000/svg" class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></svg>`,
+    tag:   `<svg xmlns="http://www.w3.org/2000/svg" class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>`,
+    chart: `<svg xmlns="http://www.w3.org/2000/svg" class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>`,
+    shield:`<svg xmlns="http://www.w3.org/2000/svg" class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+    doc:   `<svg xmlns="http://www.w3.org/2000/svg" class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>`,
+    lock:  `<svg xmlns="http://www.w3.org/2000/svg" class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+  };
+  return map[name] || map.globe;
+}
+
+function accentClasses(accent){
+  const map = {
+    brand:   { bg: 'bg-brand-50',    text: 'text-brand-700',   ring: 'hover:border-brand-400' },
+    cyan:    { bg: 'bg-cyan-50',     text: 'text-cyan-700',    ring: 'hover:border-cyan-400' },
+    amber:   { bg: 'bg-amber-50',    text: 'text-amber-700',   ring: 'hover:border-amber-400' },
+    rose:    { bg: 'bg-rose-50',     text: 'text-rose-700',    ring: 'hover:border-rose-400' },
+    indigo:  { bg: 'bg-indigo-50',   text: 'text-indigo-700',  ring: 'hover:border-indigo-400' },
+    emerald: { bg: 'bg-emerald-50',  text: 'text-emerald-700', ring: 'hover:border-emerald-400' },
+  };
+  return map[accent] || map.brand;
+}
+
+// ---------- Render público ----------
+function renderServices(){
+  const grid = $('#servicesGrid');
+  if (!grid) return;
+  grid.innerHTML = DATA.services.map(s => {
+    const a = accentClasses(s.accent);
+    const mpLink = (s.mpLink||'').trim();
+    const useMP = mpLink && mpLink !== '' && mpLink !== '#';
+    const btnHref = useMP ? mpLink : (s.link || '#');
+    const btnClass = useMP
+      ? 'inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#009ee3] hover:bg-[#0085c2] text-white text-xs font-semibold shadow-soft transition'
+      : 'inline-flex items-center gap-1 px-4 py-2 rounded-full bg-ink-900 text-white text-xs font-semibold hover:bg-ink-800 transition';
+    const btnLabel = useMP ? 'Comprar agora' : 'Quero contratar';
+    const btnIcon = useMP
+      ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`
+      : `<svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>`;
+    const mpBadge = useMP
+      ? `<span class="inline-flex items-center gap-1 mt-2 text-[10px] font-semibold text-[#009ee3]"><span class="w-1.5 h-1.5 rounded-full bg-[#009ee3]"></span>Pagamento seguro via Mercado Pago</span>`
+      : '';
+    return `
+    <article class="card-hover relative bg-white border border-ink-100 rounded-2xl p-6 shadow-soft flex flex-col">
+      <div class="w-12 h-12 rounded-xl ${a.bg} ${a.text} flex items-center justify-center mb-4">${iconFor(s.icon)}</div>
+      <h3 class="font-display text-xl font-bold text-ink-900">${escapeHTML(s.title)}</h3>
+      <p class="mt-2 text-sm text-ink-600 flex-1">${escapeHTML(s.description)}</p>
+      <div class="mt-5 flex items-center justify-between gap-3">
+        <span class="text-sm font-bold ${a.text}">${escapeHTML(s.price||'')}</span>
+        <a href="${escapeAttr(btnHref)}" target="_blank" rel="noopener" class="${btnClass}">
+          ${btnIcon}
+          ${btnLabel}
+        </a>
+      </div>
+      ${mpBadge}
+    </article>`;
+  }).join('');
+}
+
+function renderNews(){
+  const grid = $('#newsGrid');
+  if (!grid) return;
+  if (!DATA.news.length){
+    grid.innerHTML = `<div class="col-span-full text-center text-ink-500 p-10 border border-dashed border-ink-200 rounded-2xl">Nenhuma notícia publicada ainda. Acesse o painel admin para adicionar conteúdo.</div>`;
+    return;
+  }
+  grid.innerHTML = DATA.news.map(n => {
+    const img = n.image
+      ? `<img src="${escapeAttr(n.image)}" alt="${escapeAttr(n.title)}" class="w-full h-full object-cover" />`
+      : `<div class="placeholder-img w-full h-full">${escapeHTML(n.tag||'LEI')}</div>`;
+    return `
+    <article class="card-hover bg-white border border-ink-100 rounded-2xl overflow-hidden shadow-soft flex flex-col">
+      <div class="aspect-[16/10] overflow-hidden">${img}</div>
+      <div class="p-5 flex-1 flex flex-col">
+        <div class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-brand-700"><span>${escapeHTML(n.tag||'Atualização')}</span><span class="text-ink-300">·</span><span class="text-ink-500">${formatDate(n.date)}</span></div>
+        <h3 class="mt-2 font-display text-lg font-bold text-ink-900 leading-snug">${escapeHTML(n.title)}</h3>
+        <p class="mt-2 text-sm text-ink-600 flex-1">${escapeHTML(n.summary||'')}</p>
+        <a href="#" class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:underline">Ler conteúdo →</a>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+function renderContacts(){
+  // Garante que sempre tenha um link (fallback inteligente)
+  const wa = (DATA.contacts.whatsapp && DATA.contacts.whatsapp !== '' && DATA.contacts.whatsapp !== '#')
+    ? DATA.contacts.whatsapp
+    : 'https://wa.me/5551998045542'; // ← ⭐ FALLBACK DIRETO no código
+  const ig = (DATA.contacts.instagram && DATA.contacts.instagram !== '' && DATA.contacts.instagram !== '#')
+    ? DATA.contacts.instagram
+    : 'https://instagram.com/legisalimentos';
+  const em = DATA.contacts.email || 'contato@legisalimentos.com.br';
+  const li = (DATA.contacts.linkedin && DATA.contacts.linkedin !== '' && DATA.contacts.linkedin !== '#')
+    ? DATA.contacts.linkedin
+    : 'https://linkedin.com/in/legisalimentos';
+  $('#navWhats').href = wa;
+  $('#heroCta').href = wa;
+  $('#sobreCta').href = wa;
+  $('#ctaFinal').href = wa;
+  $('#cardWhats').href = wa;
+  $('#fabWhats').href = wa;
+  $('#ftWhats').href = wa;
+
+  $('#cardInsta').href = ig;
+  $('#ftInsta').href = ig;
+
+  const mail = em ? `mailto:${em}` : '#';
+  $('#cardEmail').href = mail;
+  $('#ctaEmail').href = mail;
+  $('#ftEmail').href = mail;
+
+  $('#cardLinkedin').href = li;
+}
+
+function renderOwner(){
+  const img = $('#ownerPhoto');
+  const fb = $('#ownerPhotoFallback');
+  // Blindagem: se os elementos não existirem, não faz nada
+  if (!img || !fb) return;
+  if (DATA.ownerPhoto){
+    img.src = DATA.ownerPhoto;
+    img.classList.remove('hidden');
+    fb.classList.add('hidden');
+  } else {
+    img.src = '';
+    img.classList.add('hidden');
+    fb.classList.remove('hidden');
+  }
+}
+
+function renderVideo(){
+  const url = (DATA.videoUrl || '').trim();
+  const frame = $('#videoFrame');
+  const fb = $('#videoFallback');
+  // Blindagem: se os elementos não existirem, não faz nada
+  if (!frame || !fb) return;
+  if (!url){ frame.src = ''; fb.classList.remove('hidden'); return; }
+  const embed = toEmbedUrl(url);
+  if (embed){
+    frame.src = embed;
+    fb.classList.add('hidden');
+  } else {
+    frame.src = '';
+    fb.classList.remove('hidden');
+  }
+}
+
+function toEmbedUrl(url){
+  try {
+    const u = new URL(url);
+    // YouTube
+    if (u.hostname.includes('youtube.com')){
+      const v = u.searchParams.get('v');
+      if (v) return `https://www.youtube.com/embed/${v}`;
+      if (u.pathname.startsWith('/embed/')) return url;
+      if (u.pathname.startsWith('/shorts/')) return `https://www.youtube.com/embed/${u.pathname.split('/')[2]}`;
+    }
+    if (u.hostname === 'youtu.be'){
+      return `https://www.youtube.com/embed/${u.pathname.replace('/','')}`;
+    }
+    // Vimeo
+    if (u.hostname.includes('vimeo.com')){
+      const id = u.pathname.split('/').filter(Boolean).pop();
+      if (id) return `https://player.vimeo.com/video/${id}`;
+    }
+    return null;
+  } catch(e){ return null; }
+}
+
+// ---------- Escapes ----------
+function escapeHTML(s){ return (s||'').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s){ return escapeHTML(s); }
+
+// ---------- Admin: Login ----------
+function openLogin(){
+  const m = $('#loginModal');
+  m.classList.remove('hidden');
+  m.classList.add('flex');
+  setTimeout(() => $('#loginUser').focus(), 50);
+}
+function closeLogin(){
+  const m = $('#loginModal');
+  m.classList.add('hidden');
+  m.classList.remove('flex');
+  $('#loginError').classList.add('hidden');
+  $('#loginForm').reset();
+}
+$('#loginForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const u = $('#loginUser').value.trim();
+  const p = $('#loginPass').value;
+  if (u === 'admin' && p === 'admin123'){
+    sessionStorage.setItem(SESSION_KEY, '1');
+    closeLogin();
+    openAdmin();
+  } else {
+    $('#loginError').classList.remove('hidden');
+  }
+});
+
+function openAdmin(){
+  $('#adminPanel').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  switchAdminTab('servicos');
+  renderAdminAll();
+}
+function closeAdmin(e){
+  if (e) e.preventDefault();
+  $('#adminPanel').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+function logout(){
+  sessionStorage.removeItem(SESSION_KEY);
+  closeAdmin();
+  toast('Sessão encerrada');
+}
+
+// Trigger: clique no pontinho discreto + atalho Ctrl+Shift+A
+$('#adminTrigger').addEventListener('click', openLogin);
+window.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')){
+    e.preventDefault();
+    if (sessionStorage.getItem(SESSION_KEY) === '1') openAdmin(); else openLogin();
+  }
+  if (e.key === 'Escape'){
+    if (!$('#adminPanel').classList.contains('hidden')) closeAdmin();
+    if (!$('#loginModal').classList.contains('hidden')) closeLogin();
+  }
+});
+
+// ---------- Admin: Tabs ----------
+$$('.admin-tab').forEach(btn => {
+  btn.addEventListener('click', () => switchAdminTab(btn.dataset.tab));
+});
+function switchAdminTab(tab){
+  $$('.admin-tab').forEach(b => {
+    if (b.dataset.tab === tab){
+      b.classList.add('border-brand-600','text-brand-700');
+      b.classList.remove('border-transparent','text-ink-600');
+    } else {
+      b.classList.remove('border-brand-600','text-brand-700');
+      b.classList.add('border-transparent','text-ink-600');
+    }
+  });
+  $$('.admin-pane').forEach(p => p.classList.toggle('hidden', p.dataset.pane !== tab));
+}
+
+// ---------- Admin: Serviços ----------
+function renderAdminAll(){
+  renderAdminLogo();
+  renderAdminServices();
+  renderAdminNews();
+  $('#waLink').value = DATA.contacts.whatsapp || '';
+  $('#igLink').value = DATA.contacts.instagram || '';
+  $('#emLink').value = DATA.contacts.email || '';
+  $('#liLink').value = DATA.contacts.linkedin || '';
+  $('#videoUrl').value = DATA.videoUrl || '';
+  const op = $('#ownerPreview');
+  if (DATA.ownerPhoto){ op.innerHTML = `<img src="${DATA.ownerPhoto}" class="w-full h-full object-cover" />`; }
+  else { op.innerHTML = `<span>sem foto</span>`; }
+}
+
+function renderAdminServices(){
+  const wrap = $('#servicesAdmin');
+  wrap.innerHTML = DATA.services.map((s, idx) => {
+    const a = accentClasses(s.accent);
+    return `
+    <div class="bg-white rounded-2xl border border-ink-100 shadow-soft p-5" data-id="${s.id}">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-9 h-9 rounded-lg ${a.bg} ${a.text} flex items-center justify-center">${iconFor(s.icon,'w-5 h-5')}</span>
+          <p class="font-semibold text-ink-900">Serviço #${idx+1}</p>
+        </div>
+        <button onclick="removeService('${s.id}')" class="text-xs text-rose-600 hover:underline">Remover</button>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div class="sm:col-span-2">
+          <label class="label">Título</label>
+          <input class="input" data-field="title" value="${escapeAttr(s.title)}" />
+        </div>
+        <div class="sm:col-span-2">
+          <label class="label">Descrição</label>
+          <textarea class="textarea" data-field="description" rows="3">${escapeHTML(s.description)}</textarea>
+        </div>
+        <div>
+          <label class="label">Preço</label>
+          <input class="input" data-field="price" value="${escapeAttr(s.price)}" />
+        </div>
+        <div>
+          <label class="label">Link de venda (WhatsApp/Hotmart)</label>
+          <input class="input" data-field="link" value="${escapeAttr(s.link)}" />
+        </div>
+        <div class="sm:col-span-2">
+          <label class="label">Link do Mercado Pago <span class="text-[10px] text-[#009ee3] font-bold">(prioridade sobre o link acima)</span></label>
+          <input class="input" data-field="mpLink" placeholder="https://mpago.la/xxxxx" value="${escapeAttr(s.mpLink||'')}" />
+          <p class="text-[11px] text-ink-500 mt-1">💡 Se preencher aqui, o botão vira verde “Comprar agora” e abre direto o checkout do Mercado Pago.</p>
+        </div>
+        <div>
+          <label class="label">Ícone</label>
+          <select class="select" data-field="icon">
+            ${['globe','tag','chart','shield','doc','lock'].map(i => `<option value="${i}" ${i===s.icon?'selected':''}>${i}</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <label class="label">Cor de destaque</label>
+          <select class="select" data-field="accent">
+            ${['brand','cyan','amber','rose','indigo','emerald'].map(c => `<option value="${c}" ${c===s.accent?'selected':''}>${c}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="mt-4 flex justify-end gap-2">
+        <button onclick="saveService('${s.id}')" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold">Salvar</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function getService(id){ return DATA.services.find(s => s.id === id); }
+function saveService(id){
+  const card = $(`#servicesAdmin [data-id="${id}"]`);
+  if (!card) return;
+  const fields = $$('[data-field]', card);
+  const s = getService(id); if (!s) return;
+  fields.forEach(el => { s[el.dataset.field] = el.value; });
+  saveData();
+  renderServices();
+  toast('Serviço atualizado');
+}
+function removeService(id){
+  if (!confirm('Remover este serviço?')) return;
+  DATA.services = DATA.services.filter(s => s.id !== id);
+  saveData();
+  renderServices();
+  renderAdminServices();
+  toast('Serviço removido');
+}
+function addService(){
+  const id = 'svc-' + Date.now();
+  DATA.services.push({
+    id,
+    title: 'Novo serviço',
+    description: 'Descreva aqui o serviço que será exibido na home.',
+    price: 'A partir de R$ ---',
+    link: 'https://wa.me/55XXXXXXXXXXX',
+    mpLink: '',
+    icon: 'globe',
+    accent: 'brand',
+  });
+  saveData();
+  renderServices();
+  renderAdminServices();
+  toast('Serviço adicionado');
+}
+
+// ---------- Admin: Notícias ----------
+function renderAdminNews(){
+  const wrap = $('#newsAdmin');
+  wrap.innerHTML = DATA.news.map((n, idx) => `
+    <div class="bg-white rounded-2xl border border-ink-100 shadow-soft p-5" data-id="${n.id}">
+      <div class="flex items-center justify-between mb-3">
+        <p class="font-semibold text-ink-900">Notícia #${idx+1}</p>
+        <button onclick="removeNews('${n.id}')" class="text-xs text-rose-600 hover:underline">Remover</button>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div class="sm:col-span-2">
+          <label class="label">Título</label>
+          <input class="input" data-field="title" value="${escapeAttr(n.title)}" />
+        </div>
+        <div>
+          <label class="label">Tag / Órgão</label>
+          <input class="input" data-field="tag" value="${escapeAttr(n.tag)}" />
+        </div>
+        <div>
+          <label class="label">Data</label>
+          <input class="input" type="date" data-field="date" value="${(n.date||'').slice(0,10)}" />
+        </div>
+        <div class="sm:col-span-2">
+          <label class="label">Resumo</label>
+          <textarea class="textarea" data-field="summary" rows="2">${escapeHTML(n.summary)}</textarea>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="label">Conteúdo</label>
+          <textarea class="textarea" data-field="body" rows="4">${escapeHTML(n.body)}</textarea>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="label">Imagem (.jpeg ou .bmp)</label>
+          <input type="file" accept=".jpeg,.jpg,.bmp,image/jpeg,image/bmp" data-field="imageFile" />
+          <p class="text-[11px] text-ink-500 mt-1">Você também pode colar uma URL abaixo.</p>
+          <input class="input mt-2" data-field="image" placeholder="https://... (opcional)" value="${escapeAttr(n.image)}" />
+        </div>
+      </div>
+      <div class="mt-4 flex items-center gap-3">
+        ${n.image ? `<img src="${escapeAttr(n.image)}" class="w-16 h-16 rounded-lg object-cover border" />` : ''}
+        <button onclick="saveNews('${n.id}')" class="ml-auto px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold">Salvar</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getNews(id){ return DATA.news.find(n => n.id === id); }
+
+function saveNews(id){
+  const card = $(`#newsAdmin [data-id="${id}"]`);
+  if (!card) return;
+  const n = getNews(id); if (!n) return;
+  const fields = $$('[data-field]', card);
+  const fileField = fields.find(f => f.dataset.field === 'imageFile');
+  const urlField = fields.find(f => f.dataset.field === 'image');
+  fields.forEach(el => {
+    if (el.dataset.field === 'imageFile') return;
+    if (el.dataset.field === 'image') return;
+    if (el.dataset.field === 'date') { n.date = el.value ? new Date(el.value).toISOString() : new Date().toISOString(); return; }
+    n[el.dataset.field] = el.value;
+  });
+
+  // Upload local
+  if (fileField && fileField.files && fileField.files[0]){
+    const file = fileField.files[0];
+    const ext = (file.name.split('.').pop() || '').toLowerCase();
+    if (!['jpeg','jpg','bmp'].includes(ext)){
+      alert('Formato inválido. Envie .jpeg, .jpg ou .bmp.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      n.image = ev.target.result;
+      finalizeNewsSave();
+    };
+    reader.readAsDataURL(file);
+  } else {
+    n.image = urlField ? urlField.value : n.image;
+    finalizeNewsSave();
+  }
+  function finalizeNewsSave(){
+    saveData();
+    renderNews();
+    renderAdminNews();
+    toast('Notícia salva');
+  }
+}
+function removeNews(id){
+  if (!confirm('Remover esta notícia?')) return;
+  DATA.news = DATA.news.filter(n => n.id !== id);
+  saveData();
+  renderNews();
+  renderAdminNews();
+  toast('Notícia removida');
+}
+function addNews(){
+  const id = 'news-' + Date.now();
+  DATA.news.unshift({
+    id,
+    title: 'Nova legislação / atualização',
+    summary: 'Resumo curto da notícia para chamar a atenção do leitor.',
+    body: 'Texto completo do conteúdo sobre a lei ou norma.',
+    image: '',
+    date: new Date().toISOString(),
+    tag: 'LEI',
+  });
+  saveData();
+  renderNews();
+  renderAdminNews();
+  toast('Notícia adicionada');
+}
+
+// ---------- Admin: Foto do proprietário ----------
+function saveOwnerPhoto(){
+  const f = $('#ownerFile').files?.[0];
+  if (!f){ toast('Selecione um arquivo .jpeg ou .bmp'); return; }
+  const ext = (f.name.split('.').pop() || '').toLowerCase();
+  if (!['jpeg','jpg','bmp'].includes(ext)){
+    alert('Formato inválido. Envie .jpeg, .jpg ou .bmp.');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    DATA.ownerPhoto = ev.target.result;
+    saveData();
+    renderOwner();
+    renderAdminAll();
+    toast('Foto atualizada');
+  };
+  reader.readAsDataURL(f);
+}
+function clearOwnerPhoto(){
+  DATA.ownerPhoto = '';
+  saveData();
+  renderOwner();
+  renderAdminAll();
+  toast('Foto removida');
+}
+
+// ---------- Admin: Logo da Empresa (Identidade Visual) ----------
+function saveLogo(){
+  const f = $('#logoFile')?.files?.[0];
+  if (!f){ toast('Selecione um arquivo de imagem'); return; }
+  const ext = (f.name.split('.').pop() || '').toLowerCase();
+  if (!['jpeg','jpg','bmp','png'].includes(ext)){
+    alert('Formato inválido. Use .jpeg, .jpg, .bmp ou .png.');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    DATA.logoImage = ev.target.result;
+    saveData();
+    renderLogo();
+    renderAdminLogo();
+    toast('Logo atualizado ✓');
+  };
+  reader.readAsDataURL(f);
+}
+function clearLogo(){
+  if (!confirm('Remover o logo? O SVG padrão vai voltar a aparecer.')) return;
+  DATA.logoImage = '';
+  saveData();
+  renderLogo();
+  renderAdminLogo();
+  toast('Logo removido');
+}
+function renderLogo(){
+  const img = $('#logoImageUpload');
+  const svg = $('#logoSvgDefault');
+  if (!img || !svg) return; // blindagem
+  if (DATA.logoImage){
+    img.src = DATA.logoImage;
+    img.classList.remove('hidden');
+    svg.classList.add('hidden');
+  } else {
+    img.src = '';
+    img.classList.add('hidden');
+    svg.classList.remove('hidden');
+  }
+}
+function renderAdminLogo(){
+  const op = $('#logoPreviewAdmin');
+  if (!op) return;
+  if (DATA.logoImage){
+    op.innerHTML = `<img src="${DATA.logoImage}" class="w-full h-full object-contain" />`;
+  } else {
+    op.innerHTML = `<span class="text-xs">sem upload</span>`;
+  }
+}
+
+// ---------- Admin: Vídeo ----------
+function saveVideo(){
+  DATA.videoUrl = $('#videoUrl').value.trim();
+  saveData();
+  renderVideo();
+  toast('Vídeo atualizado');
+}
+function previewVideo(){
+  renderVideo();
+  switchAdminTab('midia');
+  toast('Pré-visualização aplicada');
+}
+
+// ---------- Admin: Contatos ----------
+function saveContacts(){
+  DATA.contacts.whatsapp = $('#waLink').value.trim();
+  DATA.contacts.instagram = $('#igLink').value.trim();
+  DATA.contacts.email = $('#emLink').value.trim();
+  DATA.contacts.linkedin = $('#liLink').value.trim();
+  saveData();
+  renderContacts();
+  toast('Contatos atualizados');
+}
+
+// ---------- Menu mobile ----------
+$('#menuBtn').addEventListener('click', () => {
+  $('#mobileMenu').classList.toggle('hidden');
+});
+$$('#mobileMenu a').forEach(a => a.addEventListener('click', () => $('#mobileMenu').classList.add('hidden')));
+
+// ---------- Reveal on scroll ----------
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1 });
+$$('.reveal').forEach(el => io.observe(el));
+
+// ---------- Ano no rodapé ----------
+$('#year').textContent = new Date().getFullYear();
+
+// ---------- INIT ----------
+renderOwner();
+renderLogo();
+renderVideo();
+renderServices();
+renderNews();
+renderContacts();
+
+// Caso já esteja logado (mesma sessão)
+if (sessionStorage.getItem(SESSION_KEY) === '1'){
+  // só abre o painel se ele for explicitamente solicitado.
+}
+</script>
+</body>
+</html>
