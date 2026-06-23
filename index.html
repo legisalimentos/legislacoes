@@ -1228,7 +1228,7 @@ function renderNews(){
         <div class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-brand-700"><span>${escapeHTML(n.tag||'Atualização')}</span><span class="text-ink-300">·</span><span class="text-ink-500">${formatDate(n.date)}</span></div>
         <h3 class="mt-2 font-display text-lg font-bold text-ink-900 leading-snug">${escapeHTML(n.title)}</h3>
         <p class="mt-2 text-sm text-ink-600 flex-1">${escapeHTML(n.summary||'')}</p>
-        <a href="#" class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:underline">Ler conteúdo →</a>
+        <a href="${escapeAttr(n.body)}" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:underline">Ler conteúdo →</a>
       </div>
     </article>`;
   }).join('');
