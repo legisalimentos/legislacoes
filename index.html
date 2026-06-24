@@ -1197,7 +1197,7 @@ function renderServices(){
     <article class="card-hover relative bg-white border border-ink-100 rounded-2xl p-6 shadow-soft flex flex-col">
       <div class="w-12 h-12 rounded-xl ${a.bg} ${a.text} flex items-center justify-center mb-4">${iconFor(s.icon)}</div>
       <h3 class="font-display text-xl font-bold text-ink-900">${escapeHTML(s.title)}</h3>
-      <p class="mt-2 text-sm text-ink-600 flex-1">${escapeHTML(s.description)}</p>
+      <p class="whitespace-pre-line mt-2 text-sm text-ink-600 flex-1">${escapeHTML(s.description)}</p>
       <div class="mt-5 flex items-center justify-between gap-3">
         <span class="text-sm font-bold ${a.text}">${escapeHTML(s.price||'')}</span>
         <a href="${escapeAttr(btnHref)}" target="_blank" rel="noopener" class="${btnClass}">
