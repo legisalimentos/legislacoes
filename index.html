@@ -1670,11 +1670,11 @@ $('#year').textContent = new Date().getFullYear();
   renderNews();
   renderContacts();
 
-  // 2. Mostra estado inicial do indicador
+  // 2. Mostra estado inicial do indicador (Textos removidos para visual limpo)
   if (syncEnabled) {
-    setSync('saving', 'Conectando ao Supabase...');
+    setSync('saving', '');
   } else {
-    setSync('offline', 'Modo local (Supabase indisponível)');
+    setSync('offline', '');
   }
 
   // 3. Tenta buscar dados atualizados do Supabase (em paralelo)
