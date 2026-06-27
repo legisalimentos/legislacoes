@@ -1677,7 +1677,7 @@ $('#year').textContent = new Date().getFullYear();
     setSync('offline', '');
   }
 
-  // 3. Tenta buscar dados atualizados do Supabase (em paralelo)
+  // 3. Tenta buscar dados atualizados do Supabase (em paralelo) - Silenciado
   const loaded = await loadFromSupabase();
   if (loaded) {
     renderOwner();
@@ -1687,11 +1687,11 @@ $('#year').textContent = new Date().getFullYear();
     renderNews();
     renderContacts();
     renderAdminAll();
-    setSync('saved', 'Dados carregados da nuvem ✓');
+    setSync('saved', ''); // Removida a mensagem da nuvem
   } else if (!syncEnabled) {
-    setSync('offline', 'Modo local');
+    setSync('offline', ''); // Removida a mensagem de modo local
   } else {
-    setSync('saved', 'Pronto');
+    setSync('saved', ''); // Removida a mensagem de pronto
   }
 
   // 4. Inicia sincronização periódica (busca atualizações a cada 30s)
