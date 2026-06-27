@@ -1147,10 +1147,19 @@ function renderNews(){
     grid.innerHTML = `<div class="col-span-full text-center text-ink-500 p-10 border border-dashed border-ink-200 rounded-2xl">Nenhuma notícia publicada ainda. Acesse o painel admin para adicionar conteúdo.</div>`;
     return;
   }
-  grid.innerHTML = DATA.news.map(n => {
+  
+  // ⭐ CORREÇÃO: Ordena as notícias para que as mais recentes (por data) sempre apareçam primeiro
+  const sortedNews = [...DATA.news].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  grid.innerHTML = sortedNews.map(n => {
     const img = n.image
       ? `<img src="${escapeAttr(n.image)}" alt="${escapeAttr(n.title)}" class="w-full h-full object-cover" />`
       : `<div class="placeholder-img w-full h-full">${escapeHTML(n.tag||'LEI')}</div>`;
+    
+    // ⭐ CORREÇÃO: Fallback inteligente caso o 'body' seja um link ou texto descritivo
+    const isLink = (n.body || '').trim().startsWith('http');
+    const contentHref = isLink ? n.body.trim() : `${DATA.contacts.whatsapp || 'https://wa.me/5551998045542'}?text=Quero+saber+mais+sobre:+${encodeURIComponent(n.title)}`;
+
     return `
     <article class="card-hover bg-white border border-ink-100 rounded-2xl overflow-hidden shadow-soft flex flex-col">
       <div class="aspect-[16/10] overflow-hidden">${img}</div>
@@ -1158,17 +1167,16 @@ function renderNews(){
         <div class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-brand-700"><span>${escapeHTML(n.tag||'Atualização')}</span><span class="text-ink-300">·</span><span class="text-ink-500">${formatDate(n.date)}</span></div>
         <h3 class="mt-2 font-display text-lg font-bold text-ink-900 leading-snug">${escapeHTML(n.title)}</h3>
         <p class="mt-2 text-sm text-ink-600 flex-1">${escapeHTML(n.summary||'')}</p>
-        <a href="${escapeAttr(n.body)}" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:underline">Ler conteúdo →</a>
+        <a href="${escapeAttr(contentHref)}" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:underline">Saber mais →</a>
       </div>
     </article>`;
   }).join('');
 }
 
 function renderContacts(){
-  // Garante que sempre tenha um link (fallback inteligente)
   const wa = (DATA.contacts.whatsapp && DATA.contacts.whatsapp !== '' && DATA.contacts.whatsapp !== '#')
     ? DATA.contacts.whatsapp
-    : 'https://wa.me/5551998045542'; // ← ⭐ FALLBACK DIRETO no código
+    : 'https://wa.me/5551998045542'; 
   const ig = (DATA.contacts.instagram && DATA.contacts.instagram !== '' && DATA.contacts.instagram !== '#')
     ? DATA.contacts.instagram
     : 'https://instagram.com/legisalimentos';
@@ -1176,29 +1184,30 @@ function renderContacts(){
   const li = (DATA.contacts.linkedin && DATA.contacts.linkedin !== '' && DATA.contacts.linkedin !== '#')
     ? DATA.contacts.linkedin
     : 'https://linkedin.com/in/legisalimentos';
-  $('#navWhats').href = wa;
-  $('#heroCta').href = wa;
-  $('#sobreCta').href = wa;
-  $('#ctaFinal').href = wa;
-  $('#cardWhats').href = wa;
-  $('#fabWhats').href = wa;
-  $('#ftWhats').href = wa;
+  
+  // Elementos de navegação e chamadas de ação
+  if($('#navWhats')) $('#navWhats').href = wa;
+  if($('#heroCta')) $('#heroCta').href = wa;
+  if($('#sobreCta')) $('#sobreCta').href = wa;
+  if($('#ctaFinal')) $('#ctaFinal').href = wa;
+  if($('#cardWhats')) $('#cardWhats').href = wa;
+  if($('#fabWhats')) $('#fabWhats').href = wa;
+  if($('#ftWhats')) $('#ftWhats').href = wa;
 
-  $('#cardInsta').href = ig;
-  $('#ftInsta').href = ig;
+  if($('#cardInsta')) $('#cardInsta').href = ig;
+  if($('#ftInsta')) $('#ftInsta').href = ig;
 
   const mail = em ? `mailto:${em}` : '#';
-  $('#cardEmail').href = mail;
-  $('#ctaEmail').href = mail;
-  $('#ftEmail').href = mail;
+  if($('#cardEmail')) $('#cardEmail').href = mail;
+  if($('#ctaEmail')) $('#ctaEmail').href = mail;
+  if($('#ftEmail')) $('#ftEmail').href = mail;
 
-  $('#cardLinkedin').href = li;
+  if($('#cardLinkedin')) $('#cardLinkedin').href = li;
 }
 
 function renderOwner(){
   const img = $('#ownerPhoto');
   const fb = $('#ownerPhotoFallback');
-  // Blindagem: se os elementos não existirem, não faz nada
   if (!img || !fb) return;
   if (DATA.ownerPhoto){
     img.src = DATA.ownerPhoto;
@@ -1215,7 +1224,6 @@ function renderVideo(){
   const url = (DATA.videoUrl || '').trim();
   const frame = $('#videoFrame');
   const fb = $('#videoFallback');
-  // Blindagem: se os elementos não existirem, não faz nada
   if (!frame || !fb) return;
   if (!url){ frame.src = ''; fb.classList.remove('hidden'); return; }
   const embed = toEmbedUrl(url);
@@ -1231,7 +1239,6 @@ function renderVideo(){
 function toEmbedUrl(url){
   try {
     const u = new URL(url);
-    // YouTube
     if (u.hostname.includes('youtube.com')){
       const v = u.searchParams.get('v');
       if (v) return `https://www.youtube.com/embed/${v}`;
@@ -1241,7 +1248,6 @@ function toEmbedUrl(url){
     if (u.hostname === 'youtu.be'){
       return `https://www.youtube.com/embed/${u.pathname.replace('/','')}`;
     }
-    // Vimeo
     if (u.hostname.includes('vimeo.com')){
       const id = u.pathname.split('/').filter(Boolean).pop();
       if (id) return `https://player.vimeo.com/video/${id}`;
@@ -1257,39 +1263,44 @@ function escapeAttr(s){ return escapeHTML(s); }
 // ---------- Admin: Login ----------
 function openLogin(){
   const m = $('#loginModal');
+  if (!m) return;
   m.classList.remove('hidden');
   m.classList.add('flex');
-  setTimeout(() => $('#loginUser').focus(), 50);
+  setTimeout(() => { if($('#loginUser')) $('#loginUser').focus(); }, 50);
 }
 function closeLogin(){
   const m = $('#loginModal');
+  if (!m) return;
   m.classList.add('hidden');
   m.classList.remove('flex');
-  $('#loginError').classList.add('hidden');
-  $('#loginForm').reset();
+  if($('#loginError')) $('#loginError').classList.add('hidden');
+  if($('#loginForm')) $('#loginForm').reset();
 }
-$('#loginForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const u = $('#loginUser').value.trim();
-  const p = $('#loginPass').value;
-  if (u === 'gerson' && p === 'legis2026'){
-    sessionStorage.setItem(SESSION_KEY, '1');
-    closeLogin();
-    openAdmin();
-  } else {
-    $('#loginError').classList.remove('hidden');
-  }
-});
+
+if($('#loginForm')) {
+  $('#loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const u = $('#loginUser').value.trim();
+    const p = $('#loginPass').value;
+    if (u === 'gerson' && p === 'legis2026'){
+      sessionStorage.setItem(SESSION_KEY, '1');
+      closeLogin();
+      openAdmin();
+    } else {
+      $('#loginError').classList.remove('hidden');
+    }
+  });
+}
 
 function openAdmin(){
-  $('#adminPanel').classList.remove('hidden');
+  if($('#adminPanel')) $('#adminPanel').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
   switchAdminTab('servicos');
   renderAdminAll();
 }
 function closeAdmin(e){
   if (e) e.preventDefault();
-  $('#adminPanel').classList.add('hidden');
+  if($('#adminPanel')) $('#adminPanel').classList.add('hidden');
   document.body.style.overflow = '';
 }
 function logout(){
@@ -1299,15 +1310,16 @@ function logout(){
 }
 
 // Trigger: clique no pontinho discreto + atalho Ctrl+Shift+A
-$('#adminTrigger').addEventListener('click', openLogin);
+if($('#adminTrigger')) $('#adminTrigger').addEventListener('click', openLogin);
+
 window.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')){
     e.preventDefault();
     if (sessionStorage.getItem(SESSION_KEY) === '1') openAdmin(); else openLogin();
   }
   if (e.key === 'Escape'){
-    if (!$('#adminPanel').classList.contains('hidden')) closeAdmin();
-    if (!$('#loginModal').classList.contains('hidden')) closeLogin();
+    if ($('#adminPanel') && !$('#adminPanel').classList.contains('hidden')) closeAdmin();
+    if ($('#loginModal') && !$('#loginModal').classList.contains('hidden')) closeLogin();
   }
 });
 
@@ -1333,18 +1345,21 @@ function renderAdminAll(){
   renderAdminLogo();
   renderAdminServices();
   renderAdminNews();
-  $('#waLink').value = DATA.contacts.whatsapp || '';
-  $('#igLink').value = DATA.contacts.instagram || '';
-  $('#emLink').value = DATA.contacts.email || '';
-  $('#liLink').value = DATA.contacts.linkedin || '';
-  $('#videoUrl').value = DATA.videoUrl || '';
+  if($('#waLink')) $('#waLink').value = DATA.contacts.whatsapp || '';
+  if($('#igLink')) $('#igLink').value = DATA.contacts.instagram || '';
+  if($('#emLink')) $('#emLink').value = DATA.contacts.email || '';
+  if($('#liLink')) $('#liLink').value = DATA.contacts.linkedin || '';
+  if($('#videoUrl')) $('#videoUrl').value = DATA.videoUrl || '';
   const op = $('#ownerPreview');
-  if (DATA.ownerPhoto){ op.innerHTML = `<img src="${DATA.ownerPhoto}" class="w-full h-full object-cover" />`; }
-  else { op.innerHTML = `<span>sem foto</span>`; }
+  if(op) {
+    if (DATA.ownerPhoto){ op.innerHTML = `<img src="${DATA.ownerPhoto}" class="w-full h-full object-cover" />`; }
+    else { op.innerHTML = `<span>sem foto</span>`; }
+  }
 }
 
 function renderAdminServices(){
   const wrap = $('#servicesAdmin');
+  if (!wrap) return;
   wrap.innerHTML = DATA.services.map((s, idx) => {
     const a = accentClasses(s.accent);
     return `
@@ -1407,7 +1422,7 @@ function saveService(id){
   fields.forEach(el => { s[el.dataset.field] = el.value; });
   saveData();
   renderServices();
-  toast('Serviço atualizado');
+  toast('Serviço updated');
 }
 function removeService(id){
   if (!confirm('Remover este serviço?')) return;
@@ -1438,6 +1453,7 @@ function addService(){
 // ---------- Admin: Notícias ----------
 function renderAdminNews(){
   const wrap = $('#newsAdmin');
+  if (!wrap) return;
   wrap.innerHTML = DATA.news.map((n, idx) => `
     <div class="bg-white rounded-2xl border border-ink-100 shadow-soft p-5" data-id="${n.id}">
       <div class="flex items-center justify-between mb-3">
@@ -1462,8 +1478,8 @@ function renderAdminNews(){
           <textarea class="textarea" data-field="summary" rows="2">${escapeHTML(n.summary)}</textarea>
         </div>
         <div class="sm:col-span-2">
-          <label class="label">Conteúdo</label>
-          <textarea class="textarea" data-field="body" rows="4">${escapeHTML(n.body)}</textarea>
+          <label class="label">Conteúdo / Link de Origem</label>
+          <textarea class="textarea" data-field="body" rows="3" placeholder="Insira o texto explicativo ou uma URL externa">${escapeHTML(n.body)}</textarea>
         </div>
         <div class="sm:col-span-2">
           <label class="label">Imagem (.jpeg ou .bmp)</label>
@@ -1496,7 +1512,6 @@ function saveNews(id){
     n[el.dataset.field] = el.value;
   });
 
-  // Upload local
   if (fileField && fileField.files && fileField.files[0]){
     const file = fileField.files[0];
     const ext = (file.name.split('.').pop() || '').toLowerCase();
@@ -1561,8 +1576,8 @@ function saveOwnerPhoto(){
     saveData();
     renderOwner();
     renderAdminAll();
-    toast('Foto atualizada');
-  };
+    toast('Foto updated');
+  }
   reader.readAsDataURL(f);
 }
 function clearOwnerPhoto(){
@@ -1573,7 +1588,7 @@ function clearOwnerPhoto(){
   toast('Foto removida');
 }
 
-// ---------- Admin: Logo da Empresa (Identidade Visual) ----------
+// ---------- Admin: Logo da Empresa ----------
 function saveLogo(){
   const f = $('#logoFile')?.files?.[0];
   if (!f){ toast('Selecione um arquivo de imagem'); return; }
@@ -1603,7 +1618,7 @@ function clearLogo(){
 function renderLogo(){
   const img = $('#logoImageUpload');
   const svg = $('#logoSvgDefault');
-  if (!img || !svg) return; // blindagem
+  if (!img || !svg) return; 
   if (DATA.logoImage){
     img.src = DATA.logoImage;
     img.classList.remove('hidden');
@@ -1626,7 +1641,7 @@ function renderAdminLogo(){
 
 // ---------- Admin: Vídeo ----------
 function saveVideo(){
-  DATA.videoUrl = $('#videoUrl').value.trim();
+  if($('#videoUrl')) DATA.videoUrl = $('#videoUrl').value.trim();
   saveData();
   renderVideo();
   toast('Vídeo atualizado');
@@ -1639,19 +1654,21 @@ function previewVideo(){
 
 // ---------- Admin: Contatos ----------
 function saveContacts(){
-  DATA.contacts.whatsapp = $('#waLink').value.trim();
-  DATA.contacts.instagram = $('#igLink').value.trim();
-  DATA.contacts.email = $('#emLink').value.trim();
-  DATA.contacts.linkedin = $('#liLink').value.trim();
+  if($('#waLink')) DATA.contacts.whatsapp = $('#waLink').value.trim();
+  if($('#igLink')) DATA.contacts.instagram = $('#igLink').value.trim();
+  if($('#emLink')) DATA.contacts.email = $('#emLink').value.trim();
+  if($('#liLink')) DATA.contacts.linkedin = $('#liLink').value.trim();
   saveData();
   renderContacts();
   toast('Contatos atualizados');
 }
 
 // ---------- Menu mobile ----------
-$('#menuBtn').addEventListener('click', () => {
-  $('#mobileMenu').classList.toggle('hidden');
-});
+if($('#menuBtn')) {
+  $('#menuBtn').addEventListener('click', () => {
+    $('#mobileMenu').classList.toggle('hidden');
+  });
+}
 $$('#mobileMenu a').forEach(a => a.addEventListener('click', () => $('#mobileMenu').classList.add('hidden')));
 
 // ---------- Reveal on scroll ----------
@@ -1661,11 +1678,10 @@ const io = new IntersectionObserver((entries) => {
 $$('.reveal').forEach(el => io.observe(el));
 
 // ---------- Ano no rodapé ----------
-$('#year').textContent = new Date().getFullYear();
+if($('#year')) $('#year').textContent = new Date().getFullYear();
 
 // ---------- INIT ----------
 (async function init() {
-  // 1. Renderiza com dados do localStorage (instantâneo)
   renderOwner();
   renderLogo();
   renderVideo();
@@ -1673,14 +1689,12 @@ $('#year').textContent = new Date().getFullYear();
   renderNews();
   renderContacts();
 
-  // 2. Mostra estado inicial do indicador (Textos removidos para visual limpo)
   if (syncEnabled) {
     setSync('saving', '');
   } else {
     setSync('offline', '');
   }
 
-  // 3. Tenta buscar dados atualizados do Supabase (em paralelo) - Silenciado
   const loaded = await loadFromSupabase();
   if (loaded) {
     renderOwner();
@@ -1690,18 +1704,16 @@ $('#year').textContent = new Date().getFullYear();
     renderNews();
     renderContacts();
     renderAdminAll();
-    setSync('saved', ''); // Removida a mensagem da nuvem
+    setSync('saved', ''); 
   } else if (!syncEnabled) {
-    setSync('offline', ''); // Removida a mensagem de modo local
+    setSync('offline', ''); 
   } else {
-    setSync('saved', ''); // Removida a mensagem de pronto
+    setSync('saved', ''); 
   }
 
-  // 4. Inicia sincronização periódica (busca atualizações a cada 30s)
   if (syncEnabled) startSyncPolling();
 })();
 
-// Garante renderAll() global pra usar em outros lugares
 function renderAll() {
   renderOwner();
   renderLogo();
