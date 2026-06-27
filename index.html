@@ -1,238 +1,246 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>LegisAlimentos — Engenharia de Alimentos & Soluções Digitais</title>
-<meta name="description" content="LegisAlimentos — Engenharia de Alimentos especializada em sites, e-commerces, rotulagem, tabela nutricional, BPF, POP e APPCC para indústrias, comércios e empresas de alimentos." />
-<!-- Supabase JS SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LegisAlimentos — Engenharia de Alimentos & Soluções Digitais</title>
+  <meta name="description" content="LegisAlimentos — Engenharia de Alimentos especializada em sites, e-commerces, rotulagem, tabela nutricional, BPF, POP e APPCC para indústrias, comércios e empresas de alimentos." />
+  
+  <!-- Meta Tags Open Graph (Melhoria para Compartilhamento no WhatsApp/Redes Sociais) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="LegisAlimentos — Engenharia de Alimentos & Soluções Digitais" />
+  <meta property="og:description" content="Desenvolvimento web, e-commerces e adequação regulatória (MAPA/ANVISA) para o setor alimentício." />
+  <meta property="og:url" content="https://legisalimentos.com.br" />
+  
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    // ====== SUPABASE CONFIG ======
+    const SUPABASE_URL = 'https://dfviqdczsowafiwtspoy.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRmdmlxZGN6c293YWZpd3RzcG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4OTgyOTUsImV4cCI6MjA5NzQ3NDI5NX0.xS1shpidX0LRH3NeHER8Jxae_T5RPxc-5ZdAnT_3h5M';
+    const SUPABASE_TABLE = 'configuracoes';
+    let supabaseClient = null;
+    let syncEnabled = false;
 
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-<script>
-  // ====== SUPABASE CONFIG ======
-  const SUPABASE_URL = 'https://dfviqdczsowafiwtspoy.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRmdmlxZGN6c293YWZpd3RzcG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4OTgyOTUsImV4cCI6MjA5NzQ3NDI5NX0.xS1shpidX0LRH3NeHER8Jxae_T5RPxc-5ZdAnT_3h5M';
-  const SUPABASE_TABLE = 'configuracoes';
-  let supabaseClient = null;
-  let syncEnabled = false;
-
-  // Inicializa o cliente Supabase com proteção
-  try {
-    if (window.supabase && typeof window.supabase.createClient === 'function') {
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      syncEnabled = true;
+    // Inicializa o cliente Supabase com proteção
+    try {
+      if (window.supabase && typeof window.supabase.createClient === 'function') {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        syncEnabled = true;
+      }
+    } catch (e) {
+      console.warn('Supabase não pôde ser inicializado:', e.message);
+      syncEnabled = false;
     }
-  } catch (e) {
-    console.warn('Supabase não pôde ser inicializado:', e.message);
-    syncEnabled = false;
-  }
 
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          brand: {
-            50:  '#f0fdf4',
-            100: '#dcfce7',
-            200: '#bbf7d0',
-            300: '#86efac',
-            400: '#4ade80',
-            500: '#22c55e',
-            600: '#16a34a',
-            700: '#15803d',
-            800: '#166534',
-            900: '#14532d',
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50:  '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            },
+            ink: {
+              50:  '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+              950: '#020617',
+            }
           },
-          ink: {
-            50:  '#f8fafc',
-            100: '#f1f5f9',
-            200: '#e2e8f0',
-            300: '#cbd5e1',
-            400: '#94a3b8',
-            500: '#64748b',
-            600: '#475569',
-            700: '#334155',
-            800: '#1e293b',
-            900: '#0f172a',
-            950: '#020617',
-          }
-        },
-        fontFamily: {
-          sans: ['Inter', 'system-ui', 'sans-serif'],
-          display: ['"Playfair Display"', 'serif'],
-        },
-        boxShadow: {
-          'soft': '0 10px 40px -10px rgba(2, 6, 23, 0.1)',
-          'glow': '0 0 30px rgba(34, 197, 94, 0.35)',
-        },
-        animation: {
-          'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-          'float': 'float 4s ease-in-out infinite',
-          'shimmer': 'shimmer 2.5s linear infinite',
-        },
-        keyframes: {
-          float: {
-            '0%, 100%': { transform: 'translateY(0px)' },
-            '50%': { transform: 'translateY(-10px)' },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['"Playfair Display"', 'serif'],
           },
-          shimmer: {
-            '0%': { backgroundPosition: '-200% 0' },
-            '100%': { backgroundPosition: '200% 0' },
+          boxShadow: {
+            'soft': '0 10px 40px -10px rgba(2, 6, 23, 0.1)',
+            'glow': '0 0 30px rgba(34, 197, 94, 0.35)',
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 4s ease-in-out infinite',
+            'shimmer': 'shimmer 2.5s linear infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            shimmer: {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' },
+            }
           }
         }
       }
     }
-  }
-</script>
-<style>
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 
-  /* Gradiente hero */
-  .hero-gradient {
-    background:
-      radial-gradient(1200px 600px at 10% 10%, rgba(34,197,94,0.18), transparent 60%),
-      radial-gradient(900px 500px at 90% 30%, rgba(15,76,59,0.18), transparent 60%),
-      linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-  }
+    /* Gradiente hero */
+    .hero-gradient {
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(34,197,94,0.18), transparent 60%),
+        radial-gradient(900px 500px at 90% 30%, rgba(15,76,59,0.18), transparent 60%),
+        linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
 
-  /* Efeito glass */
-  .glass {
-    background: rgba(255,255,255,0.65);
-    backdrop-filter: saturate(180%) blur(14px);
-    -webkit-backdrop-filter: saturate(180%) blur(14px);
-    border: 1px solid rgba(15, 23, 42, 0.06);
-  }
+    /* Efeito glass */
+    .glass {
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: saturate(180%) blur(14px);
+      -webkit-backdrop-filter: saturate(180%) blur(14px);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+    }
 
-  /* Brilho premium no botão WhatsApp */
-  .whats-fab {
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    box-shadow: 0 12px 30px -5px rgba(34,197,94,0.55);
-  }
-  .whats-fab::before{
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 9999px;
-    background: radial-gradient(closest-side, rgba(34,197,94,0.5), transparent 70%);
-    filter: blur(8px);
-    z-index: -1;
-    animation: pulseGlow 2s ease-in-out infinite;
-  }
-  @keyframes pulseGlow {
-    0%, 100% { opacity: .6; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.08); }
-  }
+    /* Brilho premium no botão WhatsApp */
+    .whats-fab {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      box-shadow: 0 12px 30px -5px rgba(34,197,94,0.55);
+    }
+    .whats-fab::before{
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 9999px;
+      background: radial-gradient(closest-side, rgba(34,197,94,0.5), transparent 70%);
+      filter: blur(8px);
+      z-index: -1;
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: .6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
 
-  /* Botão chamativo "piscante" */
-  .cta-pulse {
-    position: relative;
-    overflow: hidden;
-  }
-  .cta-pulse::after {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 50%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
-    animation: ctaShine 2.6s infinite;
-  }
-  @keyframes ctaShine {
-    0% { left: -100%; }
-    100% { left: 200%; }
-  }
+    /* Botão chamativo "piscante" */
+    .cta-pulse {
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-pulse::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 50%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+      animation: ctaShine 2.6s infinite;
+    }
+    @keyframes ctaShine {
+      0% { left: -100%; }
+      100% { left: 200%; }
+    }
 
-  /* Card com hover refinado */
-  .card-hover {
-    transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
-  }
-  .card-hover:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 25px 50px -12px rgba(2,6,23,0.18);
-  }
+    /* Card com hover refinado */
+    .card-hover {
+      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 25px 50px -12px rgba(2,6,23,0.18);
+    }
 
-  /* Marca d'água sutil no header */
-  .nav-blur {
-    backdrop-filter: saturate(180%) blur(12px);
-    -webkit-backdrop-filter: saturate(180%) blur(12px);
-  }
+    /* Marca d'água sutil no header */
+    .nav-blur {
+      backdrop-filter: saturate(180%) blur(12px);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+    }
 
-  /* Inputs do admin */
-  .input, .textarea, .select {
-    width: 100%;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.75rem;
-    padding: 0.65rem 0.85rem;
-    background: #fff;
-    font-size: 0.9rem;
-    transition: all .2s ease;
-  }
-  .input:focus, .textarea:focus, .select:focus {
-    outline: none;
-    border-color: #16a34a;
-    box-shadow: 0 0 0 4px rgba(34,197,94,0.12);
-  }
-  .label { font-size: 0.78rem; font-weight: 600; color: #334155; margin-bottom: 0.35rem; display: block; }
+    /* Inputs do admin */
+    .input, .textarea, .select {
+      width: 100%;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 0.65rem 0.85rem;
+      background: #fff;
+      font-size: 0.9rem;
+      transition: all .2s ease;
+    }
+    .input:focus, .textarea:focus, .select:focus {
+      outline: none;
+      border-color: #16a34a;
+      box-shadow: 0 0 0 4px rgba(34,197,94,0.12);
+    }
+    .label { font-size: 0.78rem; font-weight: 600; color: #334155; margin-bottom: 0.35rem; display: block; }
 
-  /* Scrollbar admin */
-  .nice-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
-  .nice-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
-  .nice-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    /* Scrollbar admin */
+    .nice-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+    .nice-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+    .nice-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-  /* Modal */
-  .modal-backdrop {
-    background: rgba(2, 6, 23, 0.55);
-    backdrop-filter: blur(6px);
-  }
+    /* Modal */
+    .modal-backdrop {
+      background: rgba(2, 6, 23, 0.55);
+      backdrop-filter: blur(6px);
+    }
 
-  /* Botão admin oculto */
-  .admin-trigger {
-    cursor: pointer;
-    user-select: none;
-    opacity: 0.5;
-    transition: opacity .2s;
-  }
-  .admin-trigger:hover { opacity: 1; }
+    /* Botão admin oculto */
+    .admin-trigger {
+      cursor: pointer;
+      user-select: none;
+      opacity: 0.5;
+      transition: opacity .2s;
+    }
+    .admin-trigger:hover { opacity: 1; }
 
-  /* Linha decorativa */
-  .divider-leaf {
-    width: 64px; height: 4px; border-radius: 4px;
-    background: linear-gradient(90deg, #16a34a, #0ea5e9);
-  }
+    /* Linha decorativa */
+    .divider-leaf {
+      width: 64px; height: 4px; border-radius: 4px;
+      background: linear-gradient(90deg, #16a34a, #0ea5e9);
+    }
 
-  /* Imagens placeholder com cor */
-  .placeholder-img {
-    background: linear-gradient(135deg, #dcfce7, #cffafe);
-    display: flex; align-items: center; justify-content: center;
-    color: #166534; font-weight: 700; font-size: 0.9rem;
-  }
+    /* Imagens placeholder com cor */
+    .placeholder-img {
+      background: linear-gradient(135deg, #dcfce7, #cffafe);
+      display: flex; align-items: center; justify-content: center;
+      color: #166534; font-weight: 700; font-size: 0.9rem;
+    }
 
-  /* Tag de seção */
-  .tag {
-    display: inline-flex; align-items: center; gap: 0.4rem;
-    padding: 0.3rem 0.7rem; border-radius: 9999px;
-    background: #f0fdf4; color: #166534; font-weight: 600; font-size: 0.72rem;
-    border: 1px solid #bbf7d0;
-  }
+    /* Tag de seção */
+    .tag {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.3rem 0.7rem; border-radius: 9999px;
+      background: #f0fdf4; color: #166534; font-weight: 600; font-size: 0.72rem;
+      border: 1px solid #bbf7d0;
+    }
 
-  /* Animação de entrada */
-  .reveal { opacity: 0; transform: translateY(20px); transition: all .7s ease; }
-  .reveal.in { opacity: 1; transform: translateY(0); }
+    /* Animação de entrada */
+    .reveal { opacity: 0; transform: translateY(20px); transition: all .7s ease; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
 
-  /* Indicador de sincronização com Supabase */
-  .sync-indicator { position:fixed; bottom:5rem; right:5rem; z-index:40; padding:0.5rem 1rem; border-radius:9999px; background:#0f172a; color:white; font-size:0.75rem; font-weight:600; display:flex; align-items:center; gap:0.5rem; box-shadow:0 10px 30px rgba(0,0,0,0.2); transition: all .3s ease; }
-  .sync-indicator .dot { width:8px; height:8px; border-radius:50%; }
-  .sync-saving .dot { background:#facc15; animation:blink 1s infinite; }
-  .sync-saved .dot { background:#22c55e; }
-  .sync-error .dot { background:#ef4444; }
-  .sync-offline .dot { background:#94a3b8; }
-  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
-  @media (max-width: 640px) { .sync-indicator { bottom: 5rem; right: 1rem; font-size: 0.7rem; } }
-</style>
+    /* Indicador de sincronização com Supabase */
+    .sync-indicator { position:fixed; bottom:5rem; right:5rem; z-index:40; padding:0.5rem 1rem; border-radius:9999px; background:#0f172a; color:white; font-size:0.75rem; font-weight:600; display:flex; align-items:center; gap:0.5rem; box-shadow:0 10px 30px rgba(0,0,0,0.2); transition: all .3s ease; }
+    .sync-indicator .dot { width:8px; height:8px; border-radius:50%; }
+    .sync-saving .dot { background:#facc15; animation:blink 1s infinite; }
+    .sync-saved .dot { background:#22c55e; }
+    .sync-error .dot { background:#ef4444; }
+    .sync-offline .dot { background:#94a3b8; }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+    @media (max-width: 640px) { .sync-indicator { bottom: 5rem; right: 1rem; font-size: 0.7rem; } }
+  </style>
 </head>
 <body class="bg-white text-ink-800 antialiased">
 
