@@ -1588,27 +1588,53 @@ function clearOwnerPhoto(){
   toast('Foto removida');
 }
 
-// ---------- Admin: Logo da Empresa ----------
-function saveLogo(){
+// ---------- Admin: Logo da Empresa (Corrigido para Supabase) ----------
+async function saveLogo() {
   const f = $('#logoFile')?.files?.[0];
-  if (!f){ toast('Selecione um arquivo de imagem'); return; }
+  if (!f) { toast('Selecione um arquivo de imagem'); return; }
+  
   const ext = (f.name.split('.').pop() || '').toLowerCase();
-  if (!['jpeg','jpg','bmp','png'].includes(ext)){
+  if (!['jpeg', 'jpg', 'bmp', 'png'].includes(ext)) {
     alert('Formato inválido. Use .jpeg, .jpg, .bmp ou .png.');
     return;
   }
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    DATA.logoImage = ev.target.result;
-    saveData();
+
+  try {
+    toast('Enviando imagem...');
+    
+    // 1. Gera um nome único para o arquivo do logo
+    const fileName = `logo-empresa.${ext}`;
+
+    // 2. Faz o upload para o bucket 'logos' do novo Supabase
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('logos') 
+      .upload(fileName, f, { upsert: true });
+
+    if (uploadError) throw uploadError;
+
+    // 3. Pega a URL pública do arquivo enviado
+    const { data: urlData } = supabase.storage
+      .from('logos')
+      .getPublicUrl(fileName);
+
+    // 4. Salva o link da URL no objeto DATA (com timestamp para evitar cache)
+    DATA.logoImage = `${urlData.publicUrl}?t=${Date.now()}`;
+    
+    // 5. Salva as alterações e atualiza a tela
+    await saveData(); 
     renderLogo();
     renderAdminLogo();
-    toast('Logo atualizado ✓');
-  };
-  reader.readAsDataURL(f);
+    toast('Logo atualizado no Supabase ✓');
+
+  } catch (error) {
+    console.error(error);
+    alert('Erro ao salvar no Supabase: ' + error.message);
+  }
 }
-function clearLogo(){
+
+function clearLogo() {
   if (!confirm('Remover o logo? O SVG padrão vai voltar a aparecer.')) return;
+  
   DATA.logoImage = '';
   saveData();
   renderLogo();
