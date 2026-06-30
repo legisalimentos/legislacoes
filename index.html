@@ -1623,12 +1623,18 @@ function clearLogo() {
   renderAdminLogo();
   toast('Logo removido');
 }
+// ... deixa a função saveLogo() e clearLogo() como estão lá em cima ...
+
 function renderLogo(){
   const img = $('#logoImageUpload');
   const svg = $('#logoSvgDefault');
   if (!img || !svg) return; 
-  if (DATA.logoImage){
-    img.src = DATA.logoImage;
+  
+  // Coloque aqui o link que você pegou no Postimages
+  const meuLinkPostImages = "COLE_AQUI_O_SEU_LINK_DO_POSTIMAGES";
+  
+  if (meuLinkPostImages && meuLinkPostImages !== "COLE_AQUI_O_SEU_LINK_DO_POSTIMAGES"){
+    img.src = meuLinkPostImages;
     img.classList.remove('hidden');
     svg.classList.add('hidden');
   } else {
@@ -1637,11 +1643,16 @@ function renderLogo(){
     svg.classList.remove('hidden');
   }
 }
+
 function renderAdminLogo(){
   const op = $('#logoPreviewAdmin');
   if (!op) return;
-  if (DATA.logoImage){
-    op.innerHTML = `<img src="${DATA.logoImage}" class="w-full h-full object-contain" />`;
+  
+  // Coloque o mesmo link aqui
+  const meuLinkPostImages = "COLE_AQUI_O_SEU_LINK_DO_POSTIMAGES";
+  
+  if (meuLinkPostImages && meuLinkPostImages !== "COLE_AQUI_O_SEU_LINK_DO_POSTIMAGES"){
+    op.innerHTML = `<img src="${meuLinkPostImages}" class="w-full h-full object-contain" />`;
   } else {
     op.innerHTML = `<span class="text-xs">sem upload</span>`;
   }
