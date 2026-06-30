@@ -1606,14 +1606,14 @@ async function saveLogo() {
     const fileName = `logo-empresa.${ext}`;
 
     // 2. Faz o upload para o bucket 'logos' do novo Supabase
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    const { data: uploadData, error: uploadError } = await supabaseClient.storage
       .from('logos') 
       .upload(fileName, f, { upsert: true });
 
     if (uploadError) throw uploadError;
 
     // 3. Pega a URL pública do arquivo enviado
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = supabaseClient.storage
       .from('logos')
       .getPublicUrl(fileName);
 
