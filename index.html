@@ -1589,44 +1589,13 @@ function clearOwnerPhoto(){
 }
 
 // ---------- Admin: Logo da Empresa (Via Tabela de Dados) ----------
-// ---------- Admin: Logo da Empresa (Via Tabela de Dados) ----------
-function saveLogo(){
-  const f = $('#logoFile')?.files?.[0];
-  if (!f){ toast('Selecione um arquivo de imagem'); return; }
-  
-  const ext = (f.name.split('.').pop() || '').toLowerCase();
-  if (!['jpeg', 'jpg', 'bmp', 'png'].includes(ext)) {
-    alert('Formato inválido. Use .jpeg, .jpg, .bmp ou .png.');
-    return;
-  }
-  
-  const reader = new FileReader();
-  reader.onload = async (ev) => {
-    DATA.logoImage = ev.target.result; 
-    await saveData(); 
-    renderLogo();
-    renderAdminLogo();
-    toast('Logo salvo e sincronizado na nuvem ✓');
-  };
-  reader.readAsDataURL(f);
-}
-
-function clearLogo() {
-  if (!confirm('Remover o logo? O SVG padrão vai voltar a aparecer.')) return;
-  
-  DATA.logoImage = '';
-  saveData();
-  renderLogo();
-  renderAdminLogo();
-  toast('Logo removido');
-}
-
 function renderLogo(){
   const img = $('#logoImageUpload');
   const svg = $('#logoSvgDefault');
   if (!img || !svg) return; 
   
-  const meuLinkPostImages = "https://i.postimg.cc/9QQNtc4L/logo-(3).jpg";
+  // LINK DE TESTE (Logo do Google)
+  const meuLinkPostImages = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png";
   
   if (meuLinkPostImages && meuLinkPostImages !== ""){
     img.src = meuLinkPostImages;
@@ -1643,7 +1612,8 @@ function renderAdminLogo(){
   const op = $('#logoPreviewAdmin');
   if (!op) return;
   
-  const meuLinkPostImages = "https://i.postimg.cc/9QQNtc4L/logo-(3).jpg";
+  // LINK DE TESTE (Logo do Google)
+  const meuLinkPostImages = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png";
   
   if (meuLinkPostImages && meuLinkPostImages !== ""){
     op.innerHTML = `<img src="${meuLinkPostImages}" class="w-full h-full object-contain" />`;
