@@ -335,47 +335,65 @@
       </div>
     </div>
 
-   <!-- PARTE DA DIREITA: SEM O SVG (PRONTO PARA FOTO OU LOGO) -->
-    <div class="relative reveal in">
-      <div class="absolute -inset-6 bg-gradient-to-tr from-brand-200/40 via-cyan-100/30 to-transparent rounded-[2.5rem] blur-2xl"></div>
-      <div class="relative glass rounded-[2rem] p-3 shadow-soft">
-        <div class="rounded-[1.6rem] overflow-hidden bg-white aspect-[4/5] sm:aspect-[5/6]">
-          <div class="relative w-full h-full">
-            
-            <!-- Sua foto de proprietário (JPEG/BMP) vinda do painel vai carregar aqui -->
-            <img id="ownerPhoto" alt="Foto do proprietário" class="w-full h-full object-cover hidden" />
-            
-            <!-- AREA DO LOGO: Ativa caso você não use foto no painel -->
-            <div id="logoBg" class="w-full h-full flex items-center justify-center bg-white relative">
-              <!-- Seu logo do upload -->
-              <img id="logoImageUpload" alt="Logo LegisAlimentos" class="w-3/4 h-3/4 max-w-md object-contain mix-blend-multiply hidden" />
-            </div>
-            
-            <!-- Texto sobreposto do rodapé -->
-            <div class="absolute inset-0 flex flex-col items-center justify-end text-ink-900 p-6 sm:p-8 text-center pb-8 sm:pb-10 pointer-events-none">
-              <div class="mt-5 flex flex-wrap gap-2 justify-center">
-                <span class="px-3 py-1 text-xs rounded-full bg-brand-600/10 text-brand-800 border border-brand-600/20 backdrop-blur-sm">Sistemas de Qualidade</span>
-                <span class="px-3 py-1 text-xs rounded-full bg-brand-600/10 text-brand-800 border border-brand-600/20 backdrop-blur-sm">Rotulagem</span>
-                <span class="px-3 py-1 text-xs rounded-full bg-brand-600/10 text-brand-800 border border-brand-600/20 backdrop-blur-sm">Web para Alimentos</span>
-              </div>
-            </div>
+   // ---------- Admin: Logo da Empresa (Via Tabela de Dados) ----------
+function saveLogo(){
+  const f = $('#logoFile')?.files?.[0];
+  if (!f){ toast('Selecione um arquivo de imagem'); return; }
+  
+  const ext = (f.name.split('.').pop() || '').toLowerCase();
+  if (!['jpeg', 'jpg', 'bmp', 'png'].includes(ext)) {
+    alert('Formato inválido. Use .jpeg, .jpg, .bmp ou .png.');
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = async (ev) => {
+    DATA.logoImage = ev.target.result; 
+    await saveData(); 
+    renderLogo();
+    renderAdminLogo();
+    toast('Logo salvo e sincronizado na nuvem ✓');
+  };
+  reader.readAsDataURL(f);
+}
 
-          </div>
-        </div>
-        <div class="px-4 py-4 flex items-center justify-between">
-          <div>
-            <p class="text-xs uppercase tracking-widest text-ink-500">Especialista em</p>
-            <p class="font-semibold text-ink-900">Tecnologia + Legislação de Alimentos</p>
-          </div>
-          <div class="hidden sm:flex w-10 h-10 rounded-full bg-brand-50 items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-brand-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- FIM DA PARTE DA DIREITA --> 
-  </div>
-</section>
+function clearLogo() {
+  if (!confirm('Remover o logo? O SVG padrão vai voltar a aparecer.')) return;
+  
+  DATA.logoImage = '';
+  saveData();
+  renderLogo();
+  renderAdminLogo();
+  toast('Logo removido');
+}
+
+function renderLogo(){
+  // Encontra o espaço do logo no quadrado da direita
+  const img = document.getElementById('logoImageUpload');
+  if (!img) return; 
+  
+  // Seu link real do Postimages
+  const meuLinkPostImages = "https://i.postimg.cc/9QQNtc4L/logo-(3).jpg";
+  
+  if (meuLinkPostImages) {
+    img.src = meuLinkPostImages;
+    // Remove a classe 'hidden' para forçar o logo a aparecer na tela!
+    img.classList.remove('hidden'); 
+  }
+}
+
+function renderAdminLogo(){
+  const op = document.getElementById('logoPreviewAdmin');
+  if (!op) return;
+  
+  const meuLinkPostImages = "https://i.postimg.cc/9QQNtc4L/logo-(3).jpg";
+  
+  if (meuLinkPostImages){
+    op.innerHTML = `<img src="${meuLinkPostImages}" class="w-full h-full object-contain" />`;
+  } else {
+    op.innerHTML = `<span class="text-xs">sem upload</span>`;
+  }
+}
 
 <!-- ================== TRUST BAR ================== -->
 <section class="border-y border-ink-100 bg-ink-50/60">
