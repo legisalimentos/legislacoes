@@ -1111,50 +1111,20 @@ function renderServices(){
       ? `<span class="inline-flex items-center gap-1 mt-2 text-[10px] font-semibold text-[#009ee3]"><span class="w-1.5 h-1.5 rounded-full bg-[#009ee3]"></span>Pagamento seguro via Mercado Pago</span>`
       : '';
     return `
-    <article class="card-hover relative bg-white border border-ink-100 rounded-2xl p-6 shadow-soft flex flex-col">
+    <article class="card-hover relative bg-white border border-ink-100 rounded-2xl p-6 shadow-soft flex flex-col h-auto">
       <div class="w-12 h-12 rounded-xl ${a.bg} ${a.text} flex items-center justify-center mb-4">${iconFor(s.icon)}</div>
       <h3 class="font-display text-xl font-bold text-ink-900">${escapeHTML(s.title)}</h3>
-      <p class="whitespace-pre-line mt-2 text-sm text-ink-600 flex-1">${escapeHTML(s.description)}</p>
-      <div class="mt-5 flex items-center justify-between gap-3">
-        <span class="text-sm font-bold ${a.text}">${escapeHTML(s.price||'')}</span>
-        <a href="${escapeAttr(btnHref)}" target="_blank" rel="noopener" class="${btnClass}">
-          ${btnIcon}
-          ${btnLabel}
-        </a>
-      </div>
-      ${mpBadge}
-    </article>`;
-  }).join('');
-}
-
-function renderNews(){
-  const grid = $('#newsGrid');
-  if (!grid) return;
-  if (!DATA.news.length){
-    grid.innerHTML = `<div class="col-span-full text-center text-ink-500 p-10 border border-dashed border-ink-200 rounded-2xl">Nenhuma notícia publicada ainda. Acesse o painel admin para adicionar conteúdo.</div>`;
-    return;
-  }
-  
-  // ⭐ CORREÇÃO: Ordena as notícias para que as mais recentes (por data) sempre apareçam primeiro
-  const sortedNews = [...DATA.news].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  grid.innerHTML = sortedNews.map(n => {
-    const img = n.image
-      ? `<img src="${escapeAttr(n.image)}" alt="${escapeAttr(n.title)}" class="w-full h-full object-cover" />`
-      : `<div class="placeholder-img w-full h-full">${escapeHTML(n.tag||'LEI')}</div>`;
-    
-    // ⭐ CORREÇÃO: Fallback inteligente caso o 'body' seja um link ou texto descritivo
-    const isLink = (n.body || '').trim().startsWith('http');
-    const contentHref = isLink ? n.body.trim() : `${DATA.contacts.whatsapp || 'https://wa.me/5551998045542'}?text=Quero+saber+mais+sobre:+${encodeURIComponent(n.title)}`;
-
-    return `
-    <article class="card-hover bg-white border border-ink-100 rounded-2xl overflow-hidden shadow-soft flex flex-col">
-      <div class="aspect-[16/10] overflow-hidden">${img}</div>
-      <div class="p-5 flex-1 flex flex-col">
-        <div class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-brand-700"><span>${escapeHTML(n.tag||'Atualização')}</span><span class="text-ink-300">·</span><span class="text-ink-500">${formatDate(n.date)}</span></div>
-        <h3 class="mt-2 font-display text-lg font-bold text-ink-900 leading-snug">${escapeHTML(n.title)}</h3>
-        <p class="mt-2 text-sm text-ink-600 flex-1">${escapeHTML(n.summary||'')}</p>
-        <a href="${escapeAttr(contentHref)}" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:underline">Saber mais →</a>
+      <p class="whitespace-pre-line mt-2 text-sm text-ink-600 flex-1 h-auto">${escapeHTML(s.description)}</p>
+      
+      <div class="mt-auto pt-5 flex flex-col">
+        <div class="flex items-center justify-between gap-3 w-full">
+          <span class="text-sm font-bold ${a.text} whitespace-pre-line">${escapeHTML(s.price||'')}</span>
+          <a href="${escapeAttr(btnHref)}" target="_blank" rel="noopener" class="${btnClass} shrink-0">
+            ${btnIcon}
+            ${btnLabel}
+          </a>
+        </div>
+        ${mpBadge}
       </div>
     </article>`;
   }).join('');
