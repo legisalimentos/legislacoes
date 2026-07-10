@@ -1102,8 +1102,8 @@ function renderServices(){
     const useMP = mpLink && mpLink !== '' && mpLink !== '#';
     const btnHref = useMP ? mpLink : (s.link || '#');
     const btnClass = useMP
-      ? 'inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#009ee3] hover:bg-[#0085c2] text-white text-xs font-semibold shadow-soft transition'
-      : 'inline-flex items-center gap-1 px-4 py-2 rounded-full bg-ink-900 text-white text-xs font-semibold hover:bg-ink-800 transition';
+      ? 'inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#009ee3] hover:bg-[#0085c2] text-white text-xs font-semibold shadow-soft transition shrink-0'
+      : 'inline-flex items-center gap-1 px-4 py-2 rounded-full bg-ink-900 text-white text-xs font-semibold hover:bg-ink-800 transition shrink-0';
     const btnLabel = useMP ? 'Comprar agora' : 'Quero contratar';
     const btnIcon = useMP
       ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`
@@ -1113,22 +1113,24 @@ function renderServices(){
       : '';
       
     return `
-    <article class="card-hover relative bg-white border border-ink-100 rounded-2xl p-6 shadow-soft flex flex-col justify-between min-h-[380px] h-full">
-      <div class="flex-1 flex flex-col">
-        <div class="w-12 h-12 rounded-xl ${a.bg} ${a.text} flex items-center justify-center mb-4">${iconFor(s.icon)}</div>
-        <h3 class="font-display text-xl font-bold text-ink-900">${escapeHTML(s.title)}</h3>
-        <p class="whitespace-pre-line mt-2 text-sm text-ink-600 mb-6">${escapeHTML(s.description)}</p>
-      </div>
-      
-      <div class="mt-auto pt-4 flex flex-col border-t border-ink-50">
-        <div class="flex items-center justify-between gap-3 w-full">
-          <span class="text-sm font-bold ${a.text} whitespace-pre-line">${escapeHTML(s.price||'')}</span>
-          <a href="${escapeAttr(btnHref)}" target="_blank" rel="noopener" class="${btnClass} shrink-0">
-            ${btnIcon}
-            ${btnLabel}
-          </a>
+    <article class="card-hover relative bg-white border border-ink-100 rounded-2xl p-6 shadow-soft flex flex-col justify-between h-auto min-y-[420px]">
+      <div class="flex flex-col h-full justify-between flex-1">
+        <div>
+          <div class="w-12 h-12 rounded-xl ${a.bg} ${a.text} flex items-center justify-center mb-4">${iconFor(s.icon)}</div>
+          <h3 class="font-display text-xl font-bold text-ink-900">${escapeHTML(s.title)}</h3>
+          <p class="whitespace-pre-line mt-2 text-sm text-ink-600 dynamic-desc">${escapeHTML(s.description)}</p>
         </div>
-        ${mpBadge}
+        
+        <div class="mt-6 pt-4 flex flex-col border-t border-ink-50">
+          <div class="flex items-center justify-between gap-3 w-full">
+            <span class="text-sm font-bold ${a.text} whitespace-pre-line">${escapeHTML(s.price||'')}</span>
+            <a href="${escapeAttr(btnHref)}" target="_blank" rel="noopener" class="${btnClass}">
+              ${btnIcon}
+              ${btnLabel}
+            </a>
+          </div>
+          ${mpBadge}
+        </div>
       </div>
     </article>`;
   }).join('');
