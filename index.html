@@ -1093,7 +1093,7 @@ function accentClasses(accent){
 
 // ---------- Render público ----------
 
-// 1. SERVIÇOS DE VENDA (RESTAURADO E PROTEGIDO)
+// 1. SERVIÇOS DE VENDA (TOTALMENTE INTEGRADO E PROTEGIDO)
 function renderServices(){
   const grid = $('#servicesGrid');
   if (!grid) return;
@@ -1133,6 +1133,85 @@ function renderServices(){
           </div>
           ${mpBadge}
         </div>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+// 2. NOTÍCIAS CORRIGIDAS COM VARREDURA COMPLETA DE CAMPOS
+function renderNews() {
+  const grid = $('#newsGrid');
+  if (!grid) return;
+  
+  if (!DATA.news || DATA.news.length === 0) {
+    grid.innerHTML = `
+    <div class="col-span-full text-center py-8 text-ink-400 text-sm italic">
+      Nenhuma notícia cadastrada.
+    </div>`;
+    return;
+  }
+  
+  grid.innerHTML = DATA.news.map(n => {
+    // Data automática formatada
+    let dataFormatada = n.date || n.data || n.created_at || '';
+    if (dataFormatada.includes('T')) {
+      const partes = dataFormatada.split('T')[0].split('-');
+      if (partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+
+    const titulo = n.title || n.titulo || n.name || 'Nova Notícia';
+    const tagOrgao = n.tag || n.orgao || n.tagOrgao || n.category || ''; 
+    
+    // Varredura inteligente para pegar o resumo
+    let resumoText = n.resumo || n.description || n.content || n.texto || '';
+    
+    // Varredura inteligente para pegar a URL do botão
+    let linkOrigem = n.conteudo || n.conteudoLink || n.link || n.url || '#';
+
+    // Evita que a URL feia repita no texto se o painel duplicar os campos
+    if (resumoText === linkOrigem && linkOrigem.startsWith('http')) {
+      resumoText = ''; 
+    }
+
+    const temLink = linkOrigem && linkOrigem !== '#';
+    const imagemUrl = n.image || n.imageUrl || n.foto || n.imagem || '';
+
+    // HTML da Imagem (.jpeg ou .bmp) no Topo
+    const fotoHTML = imagemUrl 
+      ? `<div class="w-full h-48 bg-ink-50 overflow-hidden rounded-t-2xl">
+           <img src="${escapeAttr(imagemUrl)}" alt="${escapeAttr(titulo)}" class="w-full h-full object-cover" onerror="this.parentNode.style.display='none'">
+         </div>`
+      : '';
+
+    const tagHTML = tagOrgao 
+      ? `<span class="inline-block bg-ink-50 text-ink-600 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">${escapeHTML(tagOrgao)}</span>`
+      : '';
+
+    // Botão "Ler artigo completo" com o link embutido
+    const botaoHTML = temLink
+      ? `<div class="mt-4 pt-3 border-t border-ink-50 flex justify-end">
+           <a href="${escapeAttr(linkOrigem)}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-semibold text-[#009ee3] hover:underline">
+             Ler artigo completo
+             <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+           </a>
+         </div>`
+      : '';
+
+    return `
+    <article class="bg-white border border-ink-100 rounded-2xl shadow-soft flex flex-col justify-between h-full overflow-hidden">
+      <div>
+        ${fotoHTML}
+        <div class="px-6 pb-2 ${!imagemUrl ? 'pt-6' : 'pt-4'}">
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <span class="text-[11px] font-semibold text-ink-400 block">${escapeHTML(dataFormatada)}</span>
+            ${tagHTML}
+          </div>
+          <h4 class="font-display text-base font-bold text-ink-900 mb-2">${escapeHTML(titulo)}</h4>
+          ${resumoText ? `<p class="whitespace-pre-line text-sm text-ink-600 line-clamp-4 mt-2">${escapeHTML(resumoText)}</p>` : `<p class="text-sm text-ink-400 italic mt-2">[Consulte os detalhes clicando abaixo]</p>`}
+        </div>
+      </div>
+      <div class="px-6 pb-6">
+        ${botaoHTML}
       </div>
     </article>`;
   }).join('');
