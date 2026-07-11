@@ -1138,7 +1138,7 @@ function renderServices(){
   }).join('');
 }
 
-// 2. NOTÍCIAS CORRIGIDAS (CONECTADAS COM AS CAIXAS EXATAS DO SEU PAINEL)
+// 2. NOTÍCIAS ULTRA-SEGURAS (VARRE TODOS OS NOMES POSSÍVEIS DO BANCO)
 function renderNews() {
   const grid = $('#newsGrid');
   if (!grid) return;
@@ -1146,7 +1146,7 @@ function renderNews() {
   if (!DATA.news || DATA.news.length === 0) {
     grid.innerHTML = `
     <div class="col-span-full text-center py-8 text-ink-400 text-sm italic">
-      Nenhuma notícia cadastrada. Acesse o painel administrativo para adicionar.
+      Nenhuma notícia cadastrada no sistema.
     </div>`;
     return;
   }
@@ -1159,20 +1159,25 @@ function renderNews() {
       if (partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
     }
 
-    // Vinculando com o Título e Tag do Painel
-    const titulo = n.title || n.titulo || 'Nova Notícia';
-    const tagOrgao = n.tag || n.orgao || n.tagOrgao || ''; 
+    // Título e Tag
+    const titulo = n.title || n.titulo || n.name || 'Nova Notícia';
+    const tagOrgao = n.tag || n.orgao || n.tagOrgao || n.category || ''; 
     
-    // ⭐ CORREÇÃO AQUI: Pega exatamente o texto da caixa "Resumo" do seu painel
-    const resumoText = n.resumo || '';
+    // ⭐ VARREDURA DE SEGURANÇA PARA O RESUMO: tenta todas as palavras que o banco pode ter usado
+    let resumoText = n.resumo || n.description || n.content || n.texto || n.conteudo || n.excerpt || '';
     
-    // ⭐ CORREÇÃO AQUI: Pega o link correto da caixa "Conteúdo / Link de Origem"
-    const linkOrigem = n.conteudo || n.conteudoLink || n.link || n.url || '#';
+    // ⭐ VARREDURA DE SEGURANÇA PARA O LINK: tenta achar onde a URL foi guardada
+    let linkOrigem = n.conteudoLink || n.link || n.url || n.conteudo || '#';
+
+    // Se o resumo e o link forem iguais (o link foi parar na caixa de resumo), limpamos o texto do resumo para não exibir a URL feia
+    if (resumoText === linkOrigem && linkOrigem.startsWith('http')) {
+      resumoText = ''; 
+    }
 
     const temLink = linkOrigem && linkOrigem !== '#';
     const imagemUrl = n.image || n.imageUrl || n.foto || n.imagem || '';
 
-    // Imagem (.jpeg ou .bmp) no Topo
+    // Imagem (.jpeg ou .bmp)
     const fotoHTML = imagemUrl 
       ? `<div class="w-full h-48 bg-ink-50 overflow-hidden rounded-t-2xl">
            <img src="${escapeAttr(imagemUrl)}" alt="${escapeAttr(titulo)}" class="w-full h-full object-cover" onerror="this.parentNode.style.display='none'">
@@ -1183,7 +1188,7 @@ function renderNews() {
       ? `<span class="inline-block bg-ink-50 text-ink-600 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">${escapeHTML(tagOrgao)}</span>`
       : '';
 
-    // Botão "Ler artigo completo" com o link correto escondido dentro dele
+    // Botão "Ler artigo completo"
     const botaoHTML = temLink
       ? `<div class="mt-4 pt-3 border-t border-ink-50 flex justify-end">
            <a href="${escapeAttr(linkOrigem)}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-semibold text-[#009ee3] hover:underline">
@@ -1203,7 +1208,8 @@ function renderNews() {
             ${tagHTML}
           </div>
           <h4 class="font-display text-base font-bold text-ink-900 mb-2">${escapeHTML(titulo)}</h4>
-          ${resumoText ? `<p class="whitespace-pre-line text-sm text-ink-600 line-clamp-4 mt-2">${escapeHTML(resumoText)}</p>` : ''}
+          
+          ${resumoText ? `<p class="whitespace-pre-line text-sm text-ink-600 line-clamp-4 mt-2">${escapeHTML(resumoText)}</p>` : `<p class="text-sm text-ink-400 italic mt-2">[Resumo não detectado no banco de dados]</p>`}
         </div>
       </div>
       <div class="px-6 pb-6">
