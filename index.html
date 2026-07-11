@@ -1138,7 +1138,7 @@ function renderServices(){
   }).join('');
 }
 
-// 2. NOTÍCIAS EM ORDEM CLÁSSICA (FOTO -> DATA/TAG -> TÍTULO -> RESUMO -> BOTÃO)
+// 2. NOTÍCIAS CORRIGIDAS (CONECTADAS COM AS CAIXAS EXATAS DO SEU PAINEL)
 function renderNews() {
   const grid = $('#newsGrid');
   if (!grid) return;
@@ -1152,20 +1152,27 @@ function renderNews() {
   }
   
   grid.innerHTML = DATA.news.map(n => {
+    // Data automática formatada
     let dataFormatada = n.date || n.data || n.created_at || '';
     if (dataFormatada.includes('T')) {
       const partes = dataFormatada.split('T')[0].split('-');
       if (partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
     }
 
+    // Vinculando com o Título e Tag do Painel
     const titulo = n.title || n.titulo || 'Nova Notícia';
     const tagOrgao = n.tag || n.orgao || n.tagOrgao || ''; 
-    const resumoText = n.resumo || n.content || n.description || '';
-    const linkOrigem = n.link || n.url || n.conteudoLink || '#';
+    
+    // ⭐ CORREÇÃO AQUI: Pega exatamente o texto da caixa "Resumo" do seu painel
+    const resumoText = n.resumo || '';
+    
+    // ⭐ CORREÇÃO AQUI: Pega o link correto da caixa "Conteúdo / Link de Origem"
+    const linkOrigem = n.conteudo || n.conteudoLink || n.link || n.url || '#';
 
     const temLink = linkOrigem && linkOrigem !== '#';
     const imagemUrl = n.image || n.imageUrl || n.foto || n.imagem || '';
 
+    // Imagem (.jpeg ou .bmp) no Topo
     const fotoHTML = imagemUrl 
       ? `<div class="w-full h-48 bg-ink-50 overflow-hidden rounded-t-2xl">
            <img src="${escapeAttr(imagemUrl)}" alt="${escapeAttr(titulo)}" class="w-full h-full object-cover" onerror="this.parentNode.style.display='none'">
@@ -1176,6 +1183,7 @@ function renderNews() {
       ? `<span class="inline-block bg-ink-50 text-ink-600 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">${escapeHTML(tagOrgao)}</span>`
       : '';
 
+    // Botão "Ler artigo completo" com o link correto escondido dentro dele
     const botaoHTML = temLink
       ? `<div class="mt-4 pt-3 border-t border-ink-50 flex justify-end">
            <a href="${escapeAttr(linkOrigem)}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-semibold text-[#009ee3] hover:underline">
