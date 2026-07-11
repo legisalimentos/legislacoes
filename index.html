@@ -1091,7 +1091,54 @@ function accentClasses(accent){
   return map[accent] || map.brand;
 }
 
-// ⭐ ORDEM CLÁSSICA E COMPLETA DE NOTÍCIAS (FOTO -> DATA/TAG -> TÍTULO -> RESUMO -> BOTÃO)
+// ---------- Render público ----------
+
+// 1. SERVIÇOS DE VENDA (RESTAURADO E PROTEGIDO)
+function renderServices(){
+  const grid = $('#servicesGrid');
+  if (!grid) return;
+  
+  grid.innerHTML = DATA.services.map(s => {
+    const a = accentClasses(s.accent);
+    const mpLink = (s.mpLink||'').trim();
+    const useMP = mpLink && mpLink !== '' && mpLink !== '#';
+    const btnHref = useMP ? mpLink : (s.link || '#');
+    const btnClass = useMP
+      ? 'inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#009ee3] hover:bg-[#0085c2] text-white text-xs font-semibold shadow-soft transition shrink-0'
+      : 'inline-flex items-center gap-1 px-4 py-2 rounded-full bg-ink-900 text-white text-xs font-semibold hover:bg-ink-800 transition shrink-0';
+    const btnLabel = useMP ? 'Comprar agora' : 'Quero contratar';
+    const btnIcon = useMP
+      ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`
+      : `<svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>`;
+    const mpBadge = useMP
+      ? `<span class="inline-flex items-center gap-1 mt-2 text-[10px] font-semibold text-[#009ee3]"><span class="w-1.5 h-1.5 rounded-full bg-[#009ee3]"></span>Pagamento seguro via Mercado Pago</span>`
+      : '';
+      
+    return `
+    <article class="card-hover relative bg-white border border-ink-100 rounded-2xl p-6 shadow-soft flex flex-col justify-between h-full min-h-[420px]">
+      <div class="flex-1 flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-xl ${a.bg} ${a.text} flex items-center justify-center mb-4">${iconFor(s.icon)}</div>
+          <h3 class="font-display text-xl font-bold text-ink-900">${escapeHTML(s.title)}</h3>
+          <p class="whitespace-pre-line mt-2 text-sm text-ink-600">${escapeHTML(s.description)}</p>
+        </div>
+        
+        <div class="mt-6 pt-4 flex flex-col border-t border-ink-50">
+          <div class="flex items-center justify-between gap-3 w-full">
+            <span class="text-sm font-bold ${a.text} whitespace-pre-line">${escapeHTML(s.price||'')}</span>
+            <a href="${escapeAttr(btnHref)}" target="_blank" rel="noopener" class="${btnClass}">
+              ${btnIcon}
+              ${btnLabel}
+            </a>
+          </div>
+          ${mpBadge}
+        </div>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+// 2. NOTÍCIAS EM ORDEM CLÁSSICA (FOTO -> DATA/TAG -> TÍTULO -> RESUMO -> BOTÃO)
 function renderNews() {
   const grid = $('#newsGrid');
   if (!grid) return;
@@ -1105,37 +1152,30 @@ function renderNews() {
   }
   
   grid.innerHTML = DATA.news.map(n => {
-    // 1. Data automática (Tratada para o padrão brasileiro DD/MM/AAAA)
     let dataFormatada = n.date || n.data || n.created_at || '';
     if (dataFormatada.includes('T')) {
       const partes = dataFormatada.split('T')[0].split('-');
       if (partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
     }
 
-    // 2. Mapeamento dos campos vindos do seu painel de controle
     const titulo = n.title || n.titulo || 'Nova Notícia';
     const tagOrgao = n.tag || n.orgao || n.tagOrgao || ''; 
     const resumoText = n.resumo || n.content || n.description || '';
     const linkOrigem = n.link || n.url || n.conteudoLink || '#';
 
     const temLink = linkOrigem && linkOrigem !== '#';
-
-    // 3. Captura do Logo / Imagem (.jpeg ou .bmp ou URL)
     const imagemUrl = n.image || n.imageUrl || n.foto || n.imagem || '';
 
-    // HTML da Imagem (Fica no topo absoluto do card)
     const fotoHTML = imagemUrl 
       ? `<div class="w-full h-48 bg-ink-50 overflow-hidden rounded-t-2xl">
            <img src="${escapeAttr(imagemUrl)}" alt="${escapeAttr(titulo)}" class="w-full h-full object-cover" onerror="this.parentNode.style.display='none'">
          </div>`
       : '';
 
-    // HTML da Tag / Órgão
     const tagHTML = tagOrgao 
       ? `<span class="inline-block bg-ink-50 text-ink-600 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">${escapeHTML(tagOrgao)}</span>`
       : '';
 
-    // HTML do Botão "Ler artigo completo" (Fica na base do card)
     const botaoHTML = temLink
       ? `<div class="mt-4 pt-3 border-t border-ink-50 flex justify-end">
            <a href="${escapeAttr(linkOrigem)}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-semibold text-[#009ee3] hover:underline">
@@ -1145,24 +1185,19 @@ function renderNews() {
          </div>`
       : '';
 
-    // Retorna a estrutura exatamente na ordem vertical solicitada
     return `
     <article class="bg-white border border-ink-100 rounded-2xl shadow-soft flex flex-col justify-between h-full overflow-hidden">
       <div>
         ${fotoHTML}
-        
         <div class="px-6 pb-2 ${!imagemUrl ? 'pt-6' : 'pt-4'}">
           <div class="flex items-center justify-between gap-2 mb-3">
             <span class="text-[11px] font-semibold text-ink-400 block">${escapeHTML(dataFormatada)}</span>
             ${tagHTML}
           </div>
-          
           <h4 class="font-display text-base font-bold text-ink-900 mb-2">${escapeHTML(titulo)}</h4>
-          
           ${resumoText ? `<p class="whitespace-pre-line text-sm text-ink-600 line-clamp-4 mt-2">${escapeHTML(resumoText)}</p>` : ''}
         </div>
       </div>
-      
       <div class="px-6 pb-6">
         ${botaoHTML}
       </div>
