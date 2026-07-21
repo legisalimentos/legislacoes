@@ -1293,10 +1293,19 @@ function renderCarousel() {
   const dotsContainer = document.getElementById('carousel-dots');
   if (!container || !dotsContainer) return;
 
+  // Garante que appData.carousel tenha dados
+  if (!appData.carousel || appData.carousel.length === 0) {
+    appData.carousel = defaultCarousel || [];
+  }
+
   const activeSlides = appData.carousel.filter(c => c.active);
+  
+  // SEMPRE limpa o container antes (remove HTML hardcoded)
+  container.innerHTML = '';
+  dotsContainer.innerHTML = '';
+
   if (activeSlides.length === 0) {
     container.innerHTML = '<div class="w-full h-full bg-dark-800 flex items-center justify-center"><p class="text-white/50">Nenhum slide configurado</p></div>';
-    dotsContainer.innerHTML = '';
     return;
   }
 
