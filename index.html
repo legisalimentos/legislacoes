@@ -2907,7 +2907,7 @@ document.getElementById('newsletter-form').addEventListener('submit', async func
   const lgpd_consentimento = document.getElementById('news-lgpd').checked;
 
   try {
-    const response = await fetch('https://gersonlieske.app.n8n.cloud/webhook/inscricao-newsletter', {
+    const response = await fetch('https://legisalimentos.app.n8n.cloud/webhook/inscricao-newsletter', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome, email, preferencia: orgao, categorias, lgpd_consentimento })
@@ -2937,7 +2937,7 @@ document.getElementById('unsubscribe-form').addEventListener('submit', async fun
   const email = document.getElementById('unsubscribe-email').value.trim();
 
   try {
-    const response = await fetch('https://gersonlieske.app.n8n.cloud/webhook/descadastro-newsletter', {
+    const response = await fetch('https://legisalimentos.app.n8n.cloud/webhook/descadastro-newsletter', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })
