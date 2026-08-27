@@ -3112,5 +3112,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 </script>
+<!-- ============ SCRIPT ASSINATURA LEGISALIMENTOS ============ -->
+<script>
+async function assinarLegis() {
+  const campo = document.getElementById('email-assinatura');
+  const btn = document.getElementById('btn-assinar');
+  const email = campo.value.trim();
+
+  if (!email || !email.includes('@')) {
+    alert('Por favor, digite um e-mail válido. É para ele que seu acesso será liberado após o pagamento.');
+    campo.focus();
+    return;
+  }
+
+  const textoOriginal = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Gerando pagamento...';
+
+  try {
+    const resp = await fetch('https://legisalimentos.app.n8n.cloud/webhook/checkout-assinatura', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, plano: 'anual' })
+    });
+    const dados = await resp.json();
+
+    if (dados && dados.success && dados.init_point) {
+      window.location.href = dados.init_point;   // leva o cliente ao pagamento no Mercado Pago
+    } else {
+      alert('Não foi possível gerar o pagamento agora. Tente novamente em instantes.');
+      btn.disabled = false;
+      btn.textContent = textoOriginal;
+    }
+  } catch (e) {
+    alert('Erro de conexão. Verifique sua internet e tente novamente.');
+    btn.disabled = false;
+    btn.textContent = textoOriginal;
+  }
+}
+</script>
+<!-- ========== FIM SCRIPT ASSINATURA LEGISALIMENTOS ========== -->  
 </body>
 </html>
