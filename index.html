@@ -966,12 +966,14 @@ section#manuais p.mn-subtitulo {
          Cancele quando quiser.</p>
     </header>
 
-    <div class="la-pln__grade">
+    <div class="la-pln__grade" style="grid-template-columns:minmax(280px,460px);justify-content:center">
 
-      <!-- PLANO MENSAL -->
-      <div class="la-pln__card">
-        <div class="la-pln__nome">Mensal</div>
-        <div class="la-pln__preco"><span class="la-pln__cifra">R$</span>27<span class="la-pln__cents">,90</span><span class="la-pln__periodo">/mês</span></div>
+      <!-- PLANO ÚNICO ANUAL -->
+      <div class="la-pln__card la-pln__card--destaque">
+        <div class="la-pln__selo">Acesso completo por 12 meses</div>
+        <div class="la-pln__nome">Assinatura Anual</div>
+        <div class="la-pln__preco"><span class="la-pln__cifra">R$</span>247<span class="la-pln__cents">,00</span><span class="la-pln__periodo">/ano</span></div>
+        <p class="la-pln__equivale">em até 12x no cartão</p>
         <p class="la-pln__desc">Acesso completo a todas as ferramentas online:</p>
         <ul class="la-pln__lista">
           <li>Consulta de legislação por cidade</li>
@@ -985,27 +987,18 @@ section#manuais p.mn-subtitulo {
           <li>Cadastro de estabelecimento</li>
           <li>Painel de conformidade</li>
         </ul>
-        <a href="https://mpago.la/2aFNTpM" class="la-pln__btn" target="_blank" rel="noopener">
-          Assinar plano mensal
-        </a>
-      </div>
 
-      <!-- PLANO ANUAL (destaque) -->
-      <div class="la-pln__card la-pln__card--destaque">
-        <div class="la-pln__selo">Mais vantajoso · economize ~26%</div>
-        <div class="la-pln__nome">Anual</div>
-        <div class="la-pln__preco"><span class="la-pln__cifra">R$</span>247<span class="la-pln__cents">,00</span><span class="la-pln__periodo">/ano</span></div>
-        <p class="la-pln__equivale">equivale a R$ 20,58/mês</p>
-        <p class="la-pln__desc">Todas as ferramentas do plano mensal, o ano todo:</p>
-        <ul class="la-pln__lista">
-          <li>Todos os 10 serviços online inclusos</li>
-          <li>Economia de mais de R$ 85 por ano</li>
-          <li>Um único pagamento, sem preocupação</li>
-          <li>Acesso garantido por 12 meses</li>
-        </ul>
-        <a href="https://mpago.la/1r5rMjC" class="la-pln__btn la-pln__btn--destaque" target="_blank" rel="noopener">
-          Assinar plano anual
-        </a>
+        <label for="email-assinatura" style="display:block;text-align:left;font-size:14px;font-weight:600;color:#2e7d32;margin-bottom:6px">Seu e-mail de acesso:</label>
+        <input type="email" id="email-assinatura" placeholder="voce@email.com" required
+               style="width:100%;padding:13px;border:1px solid #c9dcc6;border-radius:10px;font-size:15px;margin-bottom:14px">
+
+        <button type="button" id="btn-assinar" onclick="assinarLegis()" class="la-pln__btn la-pln__btn--destaque" style="width:100%;cursor:pointer">
+          Assinar agora
+        </button>
+
+        <p style="font-size:12px;color:#7a8a77;margin:12px 0 0;line-height:1.5">
+          * O parcelamento no cartão pode ter acréscimo de juros conforme a operadora.
+        </p>
       </div>
 
     </div>
